@@ -105,7 +105,7 @@ export default function ControlCenterScreen() {
   const consoleRef = useRef<ScrollView>(null);
 
   // Import all modules count from context
-  const runningModules = 39; // 25 core + 14 kimikukiu
+  const runningModules = 52; // 25 core + 14 kimikukiu + 13 security/OSINT
   const totalTools = ALL_TOOLS.length;
   const runningTools = ALL_TOOLS.filter((t) => t.status === "RUNNING").length;
 
@@ -242,7 +242,7 @@ export default function ControlCenterScreen() {
 
         {/* ===== MODULE STATUS OVERVIEW ===== */}
         <View style={s.section}>
-          <Text style={s.sectionLabel}>◆ MODULE STATUS ({runningModules}/39)</Text>
+          <Text style={s.sectionLabel}>◆ MODULE STATUS ({runningModules}/{runningModules})</Text>
           <View style={s.moduleGrid}>
             {MODULES.slice(0, 12).map((mod) => (
               <View key={mod.id} style={[s.moduleChip, { borderColor: mod.color + "60" }]}>

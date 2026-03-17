@@ -18,6 +18,12 @@ const KIMIKUKIU_MODULE_IDS = [
   "kimikukiu-workflow", "kimikukiu-automation"
 ];
 
+const SECURITY_MODULE_IDS = [
+  "sec-dns-recon", "sec-network-scan", "sec-web-discovery", "sec-git-recon",
+  "sec-cloud-recon", "sec-injection", "sec-bruteforce", "sec-mobile",
+  "sec-cms-scan", "sec-exploit-search", "sec-takeover", "sec-osint", "sec-extra-repos"
+];
+
 describe("Tools Data System", () => {
   it("should have 190+ tools defined", () => {
     expect(ALL_TOOLS.length).toBeGreaterThanOrEqual(180);
@@ -43,7 +49,7 @@ describe("Tools Data System", () => {
   });
 
   it("every tool should belong to an existing module", () => {
-    const moduleIds = [...MODULES.map((m) => m.id), ...KIMIKUKIU_MODULE_IDS];
+    const moduleIds = [...MODULES.map((m) => m.id), ...KIMIKUKIU_MODULE_IDS, ...SECURITY_MODULE_IDS];
     ALL_TOOLS.forEach((tool) => {
       expect(moduleIds).toContain(tool.moduleId);
     });

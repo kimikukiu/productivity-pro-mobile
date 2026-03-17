@@ -345,7 +345,114 @@ const KIMIKUKIU_MODULES: Module[] = [
   },
 ];
 
-const ALL_MODULES = [...MODULES, ...KIMIKUKIU_MODULES];
+const SECURITY_MODULES: Module[] = [
+  {
+    id: "sec-dns-recon", name: "DNS & SUBDOMAIN RECON", category: "intel",
+    icon: "globe", color: "#00ff88",
+    description: "DNS enumeration, subdomain discovery: dnscan, Knockpy, Sublist3r, massdns, Amass",
+    status: "RUNNING",
+    tools: ["sec.dnscan", "sec.knockpy", "sec.sublist3r", "sec.massdns", "sec.amass"],
+    commands: ["scan", "enumerate", "resolve", "export"],
+  },
+  {
+    id: "sec-network-scan", name: "NETWORK SCANNING", category: "intel",
+    icon: "wifi", color: "#00e5ff",
+    description: "Port scanning, service detection: Nmap, Masscan, EyeWitness, Sn1per, XRay",
+    status: "RUNNING",
+    tools: ["sec.nmap", "sec.masscan", "sec.eyewitness", "sec.sn1per", "sec.xray"],
+    commands: ["scan", "discover", "fingerprint", "export"],
+  },
+  {
+    id: "sec-web-discovery", name: "WEB CONTENT DISCOVERY", category: "intel",
+    icon: "search", color: "#ffd60a",
+    description: "Directory brute-forcing, content discovery: DirBuster, dirsearch, wfuzz, GoogD0rker, Wayback, ProjectDiscovery",
+    status: "RUNNING",
+    tools: ["sec.dirbuster", "sec.dirsearch", "sec.wfuzz", "sec.googd0rker", "sec.wayback", "sec.waybackurls", "sec.projectdiscovery"],
+    commands: ["fuzz", "brute", "crawl", "dork", "export"],
+  },
+  {
+    id: "sec-git-recon", name: "GIT & SOURCE RECON", category: "intel",
+    icon: "code", color: "#bf5af2",
+    description: "Git repo analysis, secret detection: Gitrob, git-secrets, GitTools, dvcs-ripper",
+    status: "RUNNING",
+    tools: ["sec.gitrob", "sec.git_secrets", "sec.gittools", "sec.dvcs_ripper"],
+    commands: ["scan", "dump", "extract", "analyze"],
+  },
+  {
+    id: "sec-cloud-recon", name: "CLOUD & BUCKET RECON", category: "intel",
+    icon: "cloud", color: "#30d158",
+    description: "S3 bucket discovery, cloud misconfig: sandcastle, bucket_finder",
+    status: "RUNNING",
+    tools: ["sec.sandcastle", "sec.bucket_finder"],
+    commands: ["enumerate", "check", "download", "export"],
+  },
+  {
+    id: "sec-injection", name: "INJECTION & EXPLOITATION", category: "offensive",
+    icon: "warning", color: "#ff453a",
+    description: "SQL injection, XXE, SSRF, LFI, deserialization: sqlmap, XXE Injector, JWT Toolkit, ysoserial, PHPGGC",
+    status: "RUNNING",
+    tools: ["sec.sqlmap", "sec.oxml_xxe", "sec.xxeinjector", "sec.jwt_tool", "sec.ground_control", "sec.ssrfdetector", "sec.lfisuite", "sec.ysoserial", "sec.phpggc", "sec.race_the_web"],
+    commands: ["inject", "exploit", "test", "payload", "extract"],
+  },
+  {
+    id: "sec-bruteforce", name: "BRUTE FORCE & AUTH", category: "offensive",
+    icon: "lock-open", color: "#ff9f0a",
+    description: "Password brute-forcing: Hydra, patator, changeme",
+    status: "RUNNING",
+    tools: ["sec.hydra", "sec.patator", "sec.changeme"],
+    commands: ["attack", "spray", "crack", "test"],
+  },
+  {
+    id: "sec-mobile", name: "MOBILE SECURITY", category: "offensive",
+    icon: "phone", color: "#64d2ff",
+    description: "Mobile app analysis: MobSF, Apktool, dex2jar",
+    status: "RUNNING",
+    tools: ["sec.mobsf", "sec.apktool", "sec.dex2jar"],
+    commands: ["analyze", "decompile", "reverse", "report"],
+  },
+  {
+    id: "sec-cms-scan", name: "CMS & WEB APP SCANNING", category: "offensive",
+    icon: "shield", color: "#ff6b6b",
+    description: "CMS vulnerability scanning: WPScan, CMSMap, CORStest, Retire.js, bfac",
+    status: "RUNNING",
+    tools: ["sec.wpscan", "sec.cmsmap", "sec.corstest", "sec.retirejs", "sec.bfac"],
+    commands: ["scan", "enumerate", "check", "report"],
+  },
+  {
+    id: "sec-exploit-search", name: "EXPLOIT SEARCH", category: "offensive",
+    icon: "search", color: "#ff2d55",
+    description: "Exploit databases: getsploit, Findsploit",
+    status: "RUNNING",
+    tools: ["sec.getsploit", "sec.findsploit"],
+    commands: ["search", "download", "compile", "test"],
+  },
+  {
+    id: "sec-takeover", name: "SUBDOMAIN TAKEOVER", category: "offensive",
+    icon: "link", color: "#ff375f",
+    description: "Subdomain takeover: tko-subs, HostileSubBruteforcer",
+    status: "RUNNING",
+    tools: ["sec.tko_subs", "sec.hostile_sub"],
+    commands: ["scan", "verify", "claim", "report"],
+  },
+  {
+    id: "sec-osint", name: "OSINT FRAMEWORK", category: "intel",
+    icon: "eye", color: "#5ac8fa",
+    description: "OSINT automation: datasploit, WhatsApp-OSINT",
+    status: "RUNNING",
+    tools: ["sec.datasploit", "sec.whatsapp_osint"],
+    commands: ["gather", "analyze", "correlate", "export"],
+  },
+  {
+    id: "sec-extra-repos", name: "EXTRA GITHUB REPOS", category: "repos",
+    icon: "folder", color: "#ac8e68",
+    description: "Additional tools: Havij, THUDM, ZAI, SaikoHacker, promptfoo, KaliGPT, CVE Zero-Day",
+    status: "RUNNING",
+    tools: ["sec.havij", "sec.kk12_30", "sec.thudm", "sec.zai_org", "sec.saikohacker", "sec.promptfoo_sec", "sec.alishahid", "sec.kaligpt_sec", "sec.cve_zero_day", "sec.samay825"],
+    commands: ["run", "config", "status", "help"],
+  },
+];
+
+const ALL_MODULES = [...MODULES, ...KIMIKUKIU_MODULES, ...SECURITY_MODULES];
 
 const ModulesContext = createContext<ModulesContextType | undefined>(undefined);
 

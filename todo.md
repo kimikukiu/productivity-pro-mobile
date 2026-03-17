@@ -163,3 +163,21 @@
 - [x] Update tools-data.ts with all new tools (232 total tools)
 - [x] Update server routers with enhanced system prompt (39 modules documented)
 - [x] Update modules screen with new categories (all accessible)
+
+## Phase 16: Security/OSINT Tools Integration (60 tools) - COMPLETE
+- [x] Add DNS/Subdomain tools: dnscan, Knockpy, Sublist3r, massdns, Amass
+- [x] Add Network scanning tools: Nmap, Masscan, EyeWitness, Sn1per, XRay
+- [x] Add Directory/Content tools: DirBuster, dirsearch, wfuzz, GoogD0rker, Wayback, waybackurls, ProjectDiscovery
+- [x] Add Git security tools: Gitrob, git-secrets, GitTools, dvcs-ripper
+- [x] Add Cloud/Bucket tools: sandcastle, bucket_finder
+- [x] Add OSINT tools: datasploit, WhatsApp-OSINT
+- [x] Add Exploitation tools: sqlmap, oxml_xxe, XXE Injector, JWT Toolkit, LFISuite, ysoserial, PHPGGC, ground-control, ssrfDetector, Race the Web
+- [x] Add Brute force tools: Hydra, patator, changeme
+- [x] Add Mobile security tools: MobSF, Apktool, dex2jar
+- [x] Add Web security tools: WPScan, CMSMap, CORStest, Retire.js, bfac
+- [x] Add Exploit search tools: getsploit, Findsploit
+- [x] Add Subdomain takeover tools: tko-subs, HostileSubBruteforcer
+- [x] Add extra GitHub repos: Havij, kk12-30, THUDM, ZAI, SaikoHacker, promptfoo, alishahid74, KaliGPT, CVE Zero-Day Detector, samay825
+- [x] Create 13 new security modules in modules-context.tsx
+- [x] Update WHOAMISEC GPT system prompt (52 modules, 292 tools)
+- [x] All new tools have control panels with AI-assistance
