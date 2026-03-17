@@ -1,6 +1,7 @@
 import { ScrollView, Text, View, Pressable, TextInput, StyleSheet, Platform } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { MODULES } from "@/lib/modules-context";
+import { ALL_TOOLS } from "@/lib/tools-data";
 import { useEffect, useState, useCallback, useRef } from "react";
 import * as Haptics from "expo-haptics";
 
@@ -103,7 +104,8 @@ export default function ControlCenterScreen() {
   const consoleRef = useRef<ScrollView>(null);
 
   const runningModules = MODULES.filter((m) => m.status === "RUNNING").length;
-  const totalTools = MODULES.reduce((acc, m) => acc + m.tools.length, 0);
+  const totalTools = ALL_TOOLS.length;
+  const runningTools = ALL_TOOLS.filter((t) => t.status === "RUNNING").length;
 
   const haptic = useCallback((type: "light" | "medium") => {
     if (Platform.OS === "web") return;
@@ -139,7 +141,7 @@ export default function ControlCenterScreen() {
         {/* ===== HEADER ===== */}
         <View style={s.header}>
           <Text style={s.title}>WHOAMISEC PRO V8.6</Text>
-          <Text style={s.subtitle}>COMMAND CENTER | {runningModules} MODULES | {totalTools} TOOLS</Text>
+          <Text style={s.subtitle}>COMMAND CENTER | {runningModules} MODULES | {runningTools}/{totalTools} TOOLS</Text>
         </View>
 
         {/* ===== TARGET ACQUISITION ===== */}
