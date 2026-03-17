@@ -19,7 +19,7 @@ import * as Haptics from "expo-haptics";
 
 const API_BASE =
   process.env.EXPO_PUBLIC_API_URL ??
-  (Platform.OS === "web" ? window.location.origin.replace(/:\d+$/, ":3000") : "http://localhost:3000");
+  (Platform.OS === "web" && typeof window !== "undefined" ? window.location.origin.replace(/:\d+$/, ":3000") : "http://localhost:3000");
 
 export default function ToolPanelScreen() {
   const { toolId } = useLocalSearchParams<{ toolId: string }>();
