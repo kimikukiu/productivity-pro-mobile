@@ -1,162 +1,239 @@
-import { ScrollView, Text, View, Pressable, TextInput } from "react-native";
+import { ScrollView, Text, View, Pressable, TextInput, StyleSheet, Platform, Alert } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
-import { useModules, MODULES } from "@/lib/modules-context";
-import { useState } from "react";
+import { useModules, MODULES, type ModuleCategory } from "@/lib/modules-context";
+import { useState, useCallback } from "react";
+import { getApiBaseUrl } from "@/constants/oauth";
+import * as Haptics from "expo-haptics";
+
+const CATEGORIES: { id: ModuleCategory | "all"; label: string; color: string }[] = [
+  { id: "all", label: "ALL", color: "#00ff88" },
+  { id: "offensive", label: "OFFENSIVE", color: "#ff3b5c" },
+  { id: "intel", label: "INTEL", color: "#00e5ff" },
+  { id: "utility", label: "UTILITY", color: "#ffff00" },
+  { id: "ai", label: "AI", color: "#bf5af2" },
+  { id: "blockchain", label: "BLOCKCHAIN", color: "#00e5ff" },
+  { id: "repos", label: "REPOS", color: "#ff6b00" },
+];
+
+const STATUS_COLORS: Record<string, string> = {
+  RUNNING: "#00ff88",
+  STANDBY: "#ffff00",
+  ERROR: "#ff3b5c",
+  SYNCING: "#00e5ff",
+};
 
 export default function ModulesScreen() {
   const { setActiveModule, searchModules } = useModules();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [executingModule, setExecutingModule] = useState<string | null>(null);
+  const [moduleOutputs, setModuleOutputs] = useState<Record<string, string>>({});
 
   const filteredModules = searchQuery
     ? searchModules(searchQuery)
-    : selectedCategory
-      ? MODULES.filter((m) => m.category === selectedCategory)
-      : MODULES;
+    : selectedCategory === "all"
+      ? MODULES
+      : MODULES.filter((m) => m.category === selectedCategory);
 
-  const categories = ["offensive", "intel", "utility", "ai", "telegram", "zr_repos"];
+  const runningCount = MODULES.filter((m) => m.status === "RUNNING").length;
+  const totalTools = MODULES.reduce((acc, m) => acc + m.tools.length, 0);
+
+  const executeModule = useCallback(async (moduleId: string, moduleName: string) => {
+    if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setExecutingModule(moduleId);
+
+    try {
+      const baseUrl = getApiBaseUrl();
+      const res = await fetch(`${baseUrl}/api/trpc/ai.executeModule`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          json: {
+            moduleId,
+            moduleName,
+            command: `Initialize and run ${moduleName} module. Show status, available tools, and ready state.`,
+          },
+        }),
+      });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const rd = data?.result?.data?.json || data?.result?.data || data?.result || data;
+      setModuleOutputs((prev) => ({ ...prev, [moduleId]: rd?.output || "Module running..." }));
+      if (Platform.OS !== "web") Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    } catch (error: any) {
+      setModuleOutputs((prev) => ({
+        ...prev,
+        [moduleId]: `[ERROR] ${error?.message || "Failed"}\n[SELF-REPAIR] Recovering...`,
+      }));
+    } finally {
+      setExecutingModule(null);
+    }
+  }, []);
 
   return (
-    <ScreenContainer className="bg-background flex flex-col">
+    <ScreenContainer className="bg-background" edges={["top", "left", "right"]}>
       {/* Header */}
-      <View className="px-4 pt-4 pb-3 border-b border-border">
-        <Text className="text-2xl font-bold text-primary mb-3 font-mono">MODULES</Text>
+      <View style={st.header}>
+        <View style={st.headerRow}>
+          <Text style={st.headerTitle}>MODULES</Text>
+          <View style={st.headerStats}>
+            <View style={st.statBadge}>
+              <View style={[st.statDot, { backgroundColor: "#00ff88" }]} />
+              <Text style={st.statText}>{runningCount} RUNNING</Text>
+            </View>
+            <View style={st.statBadge}>
+              <Text style={[st.statText, { color: "#ffff00" }]}>{totalTools} TOOLS</Text>
+            </View>
+          </View>
+        </View>
 
         {/* Search */}
         <TextInput
           value={searchQuery}
           onChangeText={setSearchQuery}
-          placeholder="Search 370+ tools..."
-          placeholderTextColor="#6b7280"
-          style={{
-            backgroundColor: "#111827",
-            color: "#e0e7ff",
-            borderColor: "#1e293b",
-            borderWidth: 1,
-            borderRadius: 8,
-            paddingHorizontal: 12,
-            paddingVertical: 10,
-            fontFamily: "monospace",
-            fontSize: 12,
-            marginBottom: 12,
-          }}
+          placeholder="Search modules & tools..."
+          placeholderTextColor="#4b5563"
+          style={st.searchInput}
         />
 
-        {/* Category Filter */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="gap-2">
-          <Pressable
-            onPress={() => setSelectedCategory(null)}
-            style={({ pressed }) => [
-              {
-                paddingHorizontal: 12,
-                paddingVertical: 6,
-                borderRadius: 6,
-                backgroundColor: !selectedCategory ? "#00ff88" : "#1e293b",
-                opacity: pressed ? 0.8 : 1,
-              },
-            ]}
-          >
-            <Text
-              className={`text-xs font-bold font-mono ${
-                !selectedCategory ? "text-background" : "text-foreground"
-              }`}
-            >
-              ALL
-            </Text>
-          </Pressable>
-          {categories.map((cat) => (
-            <Pressable
-              key={cat}
-              onPress={() => setSelectedCategory(cat)}
-              style={({ pressed }) => [
-                {
-                  paddingHorizontal: 12,
-                  paddingVertical: 6,
-                  borderRadius: 6,
-                  backgroundColor: selectedCategory === cat ? "#00ff88" : "#1e293b",
-                  opacity: pressed ? 0.8 : 1,
-                },
-              ]}
-            >
-              <Text
-                className={`text-xs font-bold font-mono uppercase ${
-                  selectedCategory === cat ? "text-background" : "text-foreground"
-                }`}
-              >
-                {cat.replace("_", " ")}
-              </Text>
-            </Pressable>
-          ))}
-        </ScrollView>
-      </View>
-
-      {/* Modules Grid */}
-      <ScrollView className="flex-1 px-4 py-4" contentContainerStyle={{ gap: 12, paddingBottom: 20 }}>
-        {filteredModules.map((module) => (
-          <Pressable
-            key={module.id}
-            onPress={() => setActiveModule(module)}
-            style={({ pressed }) => [
-              {
-                backgroundColor: pressed ? "#1a2332" : "#111827",
-                borderColor: module.color,
-                borderWidth: 1.5,
-                borderRadius: 8,
-                padding: 12,
-                opacity: pressed ? 0.9 : 1,
-              },
-            ]}
-          >
-            <View className="flex-row items-start justify-between">
-              <View className="flex-1">
-                <Text
-                  className="text-sm font-bold font-mono mb-1"
-                  style={{ color: module.color }}
-                >
-                  {module.name}
-                </Text>
-                <Text className="text-xs text-muted mb-2">{module.description}</Text>
-                <View className="flex-row gap-2 items-center">
-                  <View
-                    className="px-2 py-1 rounded"
-                    style={{ backgroundColor: module.color + "20" }}
-                  >
-                    <Text className="text-xs font-mono" style={{ color: module.color }}>
-                      {module.category.toUpperCase()}
-                    </Text>
-                  </View>
-                </View>
-              </View>
+        {/* Categories */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 5, paddingBottom: 8 }}>
+          {CATEGORIES.map((cat) => {
+            const isActive = selectedCategory === cat.id;
+            return (
               <Pressable
+                key={cat.id}
+                onPress={() => {
+                  setSelectedCategory(cat.id);
+                  if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
                 style={({ pressed }) => [
+                  st.catChip,
                   {
-                    paddingHorizontal: 12,
-                    paddingVertical: 8,
-                    borderRadius: 6,
-                    backgroundColor: module.color,
-                    opacity: pressed ? 0.8 : 1,
+                    backgroundColor: isActive ? cat.color : "transparent",
+                    borderColor: isActive ? cat.color : "#1e293b",
+                    opacity: pressed ? 0.7 : 1,
                   },
                 ]}
               >
-                <Text className="text-xs font-bold text-background">EXEC</Text>
+                <Text style={[st.catChipText, { color: isActive ? "#0a0e17" : cat.color }]}>
+                  {cat.label}
+                </Text>
               </Pressable>
+            );
+          })}
+        </ScrollView>
+      </View>
+
+      {/* Modules List */}
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: 8, paddingHorizontal: 12, paddingVertical: 10, paddingBottom: 20 }}>
+        {filteredModules.map((module) => {
+          const hasOutput = !!moduleOutputs[module.id];
+          const isExecuting = executingModule === module.id;
+
+          return (
+            <View key={module.id} style={[st.moduleCard, { borderColor: module.color + "60" }]}>
+              {/* Module Header */}
+              <View style={st.moduleHeader}>
+                <View style={{ flex: 1 }}>
+                  <View style={st.moduleNameRow}>
+                    <Text style={[st.moduleName, { color: module.color }]}>{module.name}</Text>
+                    <View style={[st.statusBadge, { backgroundColor: STATUS_COLORS[module.status] + "20", borderColor: STATUS_COLORS[module.status] }]}>
+                      <View style={[st.statusDotSmall, { backgroundColor: STATUS_COLORS[module.status] }]} />
+                      <Text style={[st.statusLabel, { color: STATUS_COLORS[module.status] }]}>{module.status}</Text>
+                    </View>
+                  </View>
+                  <Text style={st.moduleDesc}>{module.description}</Text>
+                </View>
+              </View>
+
+              {/* Tools & Commands */}
+              <View style={st.moduleTools}>
+                <Text style={st.toolsLabel}>TOOLS: {module.tools.length}</Text>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 4 }}>
+                  {module.tools.slice(0, 4).map((tool) => (
+                    <View key={tool} style={[st.toolTag, { borderColor: module.color + "40" }]}>
+                      <Text style={[st.toolTagText, { color: module.color }]}>{tool}</Text>
+                    </View>
+                  ))}
+                  {module.tools.length > 4 && (
+                    <View style={[st.toolTag, { borderColor: "#4b5563" }]}>
+                      <Text style={[st.toolTagText, { color: "#6b7280" }]}>+{module.tools.length - 4}</Text>
+                    </View>
+                  )}
+                </ScrollView>
+              </View>
+
+              {/* Execute Button */}
+              <View style={st.moduleActions}>
+                <Pressable
+                  onPress={() => executeModule(module.id, module.name)}
+                  disabled={isExecuting}
+                  style={({ pressed }) => [
+                    st.execBtn,
+                    {
+                      backgroundColor: isExecuting ? "#333" : pressed ? module.color + "cc" : module.color,
+                    },
+                  ]}
+                >
+                  <Text style={st.execBtnText}>{isExecuting ? "RUNNING..." : "▶ EXECUTE"}</Text>
+                </Pressable>
+                <View style={[st.catBadge, { backgroundColor: module.color + "15", borderColor: module.color + "40" }]}>
+                  <Text style={[st.catBadgeText, { color: module.color }]}>{module.category.toUpperCase()}</Text>
+                </View>
+              </View>
+
+              {/* Output */}
+              {hasOutput && (
+                <View style={st.outputBox}>
+                  <Text style={st.outputText} selectable>{moduleOutputs[module.id]}</Text>
+                </View>
+              )}
             </View>
-          </Pressable>
-        ))}
+          );
+        })}
 
         {filteredModules.length === 0 && (
-          <View className="flex-1 items-center justify-center py-20">
-            <Text className="text-muted text-center">No modules found</Text>
+          <View style={{ alignItems: "center", paddingVertical: 40 }}>
+            <Text style={{ color: "#6b7280", fontFamily: mono }}>No modules found</Text>
           </View>
         )}
       </ScrollView>
-
-      {/* Footer */}
-      <View className="border-t border-border px-4 py-3 bg-surface">
-        <Text className="text-xs text-muted text-center font-mono">
-          {filteredModules.length} modules available
-        </Text>
-      </View>
     </ScreenContainer>
   );
 }
+
+const mono = Platform.OS === "ios" ? "Menlo" : "monospace";
+const st = StyleSheet.create({
+  header: { paddingHorizontal: 12, paddingTop: 10, borderBottomWidth: 1, borderBottomColor: "#1e293b" },
+  headerRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 8 },
+  headerTitle: { fontSize: 20, fontWeight: "bold", color: "#00ff88", fontFamily: mono },
+  headerStats: { flexDirection: "row", gap: 8 },
+  statBadge: { flexDirection: "row", alignItems: "center", gap: 4 },
+  statDot: { width: 6, height: 6, borderRadius: 3 },
+  statText: { fontSize: 9, color: "#00ff88", fontFamily: mono, fontWeight: "bold" },
+  searchInput: { backgroundColor: "#0d1117", color: "#e0e7ff", borderWidth: 1, borderColor: "#1e293b", borderRadius: 8, paddingHorizontal: 12, paddingVertical: 8, fontFamily: mono, fontSize: 12, marginBottom: 8 },
+  catChip: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 5, borderWidth: 1 },
+  catChipText: { fontSize: 9, fontWeight: "bold", fontFamily: mono },
+  moduleCard: { backgroundColor: "#0d1117", borderWidth: 1, borderRadius: 10, padding: 12, gap: 8 },
+  moduleHeader: { flexDirection: "row", alignItems: "flex-start" },
+  moduleNameRow: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 },
+  moduleName: { fontSize: 13, fontWeight: "bold", fontFamily: mono },
+  statusBadge: { flexDirection: "row", alignItems: "center", gap: 3, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, borderWidth: 1 },
+  statusDotSmall: { width: 5, height: 5, borderRadius: 3 },
+  statusLabel: { fontSize: 8, fontWeight: "bold", fontFamily: mono },
+  moduleDesc: { fontSize: 11, color: "#6b7280", lineHeight: 15 },
+  moduleTools: { gap: 4 },
+  toolsLabel: { fontSize: 9, color: "#4b5563", fontFamily: mono, fontWeight: "bold" },
+  toolTag: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 3, borderWidth: 1, backgroundColor: "#11182780" },
+  toolTagText: { fontSize: 9, fontFamily: mono },
+  moduleActions: { flexDirection: "row", alignItems: "center", gap: 8 },
+  execBtn: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: 6 },
+  execBtnText: { fontSize: 10, fontWeight: "bold", color: "#0a0e17", fontFamily: mono },
+  catBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 4, borderWidth: 1 },
+  catBadgeText: { fontSize: 8, fontWeight: "bold", fontFamily: mono },
+  outputBox: { backgroundColor: "#111827", borderColor: "#1e293b", borderWidth: 1, borderRadius: 6, padding: 8, maxHeight: 150 },
+  outputText: { fontSize: 10, color: "#00ff88", fontFamily: mono, lineHeight: 14 },
+});
