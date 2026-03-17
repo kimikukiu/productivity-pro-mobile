@@ -1,0 +1,24 @@
+# Project TODO
+
+- [x] Configure dark hacker-style theme colors in theme.config.js
+- [x] Update icon-symbol.tsx with tab icons for all tabs
+- [x] Create TaskContext provider with AsyncStorage persistence
+- [x] Wire TaskProvider into root layout
+- [x] Create tab layout with 5 tabs: Dashboard, Tasks, AI Chat, Activity, Settings
+- [x] Build Dashboard (Home) screen with stats cards and active missions
+- [x] Build Tasks screen with segmented control, FlatList, and swipe actions
+- [x] Build AI Chat screen (Quantum Intelligence) with real-time GPT responses
+- [x] Build Activity Log screen with terminal-style event list
+- [x] Build Settings screen with app info and data management
+- [x] Implement Add Task modal with priority and category selection
+- [x] Implement task completion with haptic feedback
+- [x] Implement task deletion
+- [x] Implement AI chat with server-side LLM (built-in, no API key needed)
+- [x] AI chat: real-time streaming responses
+- [ ] AI chat: web search / internet reference capability
+- [ ] AI chat: auto-repair / self-diagnostic tool suggestions
+- [x] Add floating action button (FAB) on Tasks screen
+- [x] Add haptic feedback on key interactions
+- [x] Generate custom app logo
+- [x] Update app.config.ts with branding
+- [ ] Final testing and checkpoint
