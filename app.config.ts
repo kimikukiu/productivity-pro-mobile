@@ -32,7 +32,7 @@ const env = {
   appSlug: "productivity-pro-mobile",
   // S3 URL of the app logo - set this to the URL returned by generate_image when creating custom logo
   // Leave empty to use the default icon from assets/images/icon.png
-  logoUrl: "https://d2xsxph8kpxj0f.cloudfront.net/310519663375123518/9thrL9qNiQPasVXGqSvPa6/icon-6Uus3bij9X6GCwbxuF54xx.webp",
+  logoUrl: "",
   scheme: schemeFromBundleId,
   iosBundleId: bundleId,
   androidPackage: bundleId,
