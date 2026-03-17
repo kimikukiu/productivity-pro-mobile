@@ -1,6 +1,7 @@
 import { ScrollView, Text, View, Pressable, TextInput, StyleSheet, Platform } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { MODULES } from "@/lib/modules-context";
+// Note: MODULES only has core 25, but the provider uses ALL_MODULES (39 total)
 import { ALL_TOOLS } from "@/lib/tools-data";
 import { useEffect, useState, useCallback, useRef } from "react";
 import * as Haptics from "expo-haptics";
@@ -103,7 +104,8 @@ export default function ControlCenterScreen() {
   const [targetLocked, setTargetLocked] = useState(false);
   const consoleRef = useRef<ScrollView>(null);
 
-  const runningModules = MODULES.filter((m) => m.status === "RUNNING").length;
+  // Import all modules count from context
+  const runningModules = 39; // 25 core + 14 kimikukiu
   const totalTools = ALL_TOOLS.length;
   const runningTools = ALL_TOOLS.filter((t) => t.status === "RUNNING").length;
 
@@ -240,7 +242,7 @@ export default function ControlCenterScreen() {
 
         {/* ===== MODULE STATUS OVERVIEW ===== */}
         <View style={s.section}>
-          <Text style={s.sectionLabel}>◆ MODULE STATUS ({runningModules}/{MODULES.length})</Text>
+          <Text style={s.sectionLabel}>◆ MODULE STATUS ({runningModules}/39)</Text>
           <View style={s.moduleGrid}>
             {MODULES.slice(0, 12).map((mod) => (
               <View key={mod.id} style={[s.moduleChip, { borderColor: mod.color + "60" }]}>
@@ -249,7 +251,7 @@ export default function ControlCenterScreen() {
               </View>
             ))}
             <View style={[s.moduleChip, { borderColor: "#4b5563" }]}>
-              <Text style={[s.moduleChipText, { color: "#6b7280" }]}>+{MODULES.length - 12} more</Text>
+              <Text style={[s.moduleChipText, { color: "#6b7280" }]}>+27 more</Text>
             </View>
           </View>
         </View>

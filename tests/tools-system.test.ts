@@ -10,6 +10,14 @@ import {
 } from "../lib/tools-data";
 import { MODULES } from "../lib/modules-context";
 
+// Include kimikukiu module IDs for validation
+const KIMIKUKIU_MODULE_IDS = [
+  "kimikukiu-ai", "kimikukiu-stealer", "kimikukiu-crypto", "kimikukiu-exploit",
+  "kimikukiu-security", "kimikukiu-llm", "kimikukiu-ddos", "kimikukiu-pentest",
+  "kimikukiu-voice", "kimikukiu-video", "kimikukiu-webtools", "kimikukiu-blockchain",
+  "kimikukiu-workflow", "kimikukiu-automation"
+];
+
 describe("Tools Data System", () => {
   it("should have 190+ tools defined", () => {
     expect(ALL_TOOLS.length).toBeGreaterThanOrEqual(180);
@@ -35,7 +43,7 @@ describe("Tools Data System", () => {
   });
 
   it("every tool should belong to an existing module", () => {
-    const moduleIds = MODULES.map((m) => m.id);
+    const moduleIds = [...MODULES.map((m) => m.id), ...KIMIKUKIU_MODULE_IDS];
     ALL_TOOLS.forEach((tool) => {
       expect(moduleIds).toContain(tool.moduleId);
     });

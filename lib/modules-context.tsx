@@ -229,18 +229,136 @@ interface ModulesContextType {
   getAllTools: () => string[];
 }
 
+// ── KIMIKUKIU REPOS MODULES ──
+const KIMIKUKIU_MODULES: Module[] = [
+  {
+    id: "kimikukiu-ai", name: "KIMIKUKIU AI/ML", category: "ai",
+    icon: "bolt-fill", color: "#bf5af2",
+    description: "AI/ML models: ImageReward, CogVideo, GLM-Image, TheGodOfAI, OpenClaw, CaRR, MCF, W0rm-GPT",
+    status: "RUNNING",
+    tools: ["kk.imagereward", "kk.cogvideo", "kk.glm_image", "kk.carr", "kk.w0rm_gpt", "kk.mcf", "kk.thegodofai", "kk.openclaw_android_assistant"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-stealer", name: "KIMIKUKIU STEALER", category: "offensive",
+    icon: "lock-fill", color: "#ff00ff",
+    description: "Stealer tools: Satan-Stealer, Cryptocurrency-Stealer",
+    status: "RUNNING",
+    tools: ["kk.satan_stealer", "kk.cryptocurrency_stealer"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-crypto", name: "KIMIKUKIU CRYPTO", category: "blockchain",
+    icon: "trending-up", color: "#ffff00",
+    description: "Crypto mining: CryptoNote Easy Miner with GUI setup",
+    status: "RUNNING",
+    tools: ["kk.cryptonote_easy_miner"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-exploit", name: "KIMIKUKIU EXPLOIT", category: "offensive",
+    icon: "warning", color: "#ff6b00",
+    description: "Exploit tools: LabExploit, XGPT-WormGPT, BitlockMove, CVE-2025-43300 PoC",
+    status: "RUNNING",
+    tools: ["kk.labexploit", "kk.xgpt_wormgpt", "kk.bitlockmove", "kk.cve_2025_43300", "kk.fuckjews"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-security", name: "KIMIKUKIU SECURITY", category: "offensive",
+    icon: "shield-fill", color: "#ff3b5c",
+    description: "Security tools: AiScan-N, Hexstrike-AI 150+ tools, TLS, Hajime-AG, WHM-UN1C, PiuPiuBoomBoom",
+    status: "RUNNING",
+    tools: ["kk.aiscan_n", "kk.hexstrike_ai", "kk.tls", "kk.hajime_ag", "kk.whm_un1c", "kk.piupiuboomboom"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-webtools", name: "KIMIKUKIU WEB TOOLS", category: "utility",
+    icon: "code", color: "#ffff00",
+    description: "Web tools: P4RS3LT0NGV3 steganography, WEB-CLONER, LinkScrapper",
+    status: "RUNNING",
+    tools: ["kk.p4rs3lt0ngv3", "kk.web_cloner", "kk.linkscrapper"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-video", name: "KIMIKUKIU VIDEO", category: "utility",
+    icon: "video", color: "#ffff00",
+    description: "Video generation: RealVideo streaming, Kaleido multi-subject reference video",
+    status: "RUNNING",
+    tools: ["kk.realvideo", "kk.kaleido"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-voice", name: "KIMIKUKIU VOICE", category: "utility",
+    icon: "volume-up", color: "#00ff88",
+    description: "Voice tools: GLM-TTS, GLM-ASR speech recognition, GPT-SoVITS voice cloning",
+    status: "RUNNING",
+    tools: ["kk.glm_tts", "kk.glm_asr", "kk.gpt_sovits"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-llm", name: "KIMIKUKIU LLM", category: "ai",
+    icon: "message", color: "#bf5af2",
+    description: "LLM suite: GLM-5, GLM-4.5, GLM-V, vLLM, AgentBench, LeakHub, promptfoo, slime, worm-ai, AutoTemp, Open-AutoGLM, KaliGPT",
+    status: "RUNNING",
+    tools: ["kk.leakhub", "kk.glm_v", "kk.agentbench", "kk.vllm", "kk.glm_5", "kk.glm_4_5", "kk.glm_simple_evals", "kk.worm_ai"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-blockchain", name: "KIMIKUKIU BLOCKCHAIN", category: "blockchain",
+    icon: "trending-up", color: "#00ff88",
+    description: "Blockchain: Reth Ethereum protocol implementation in Rust",
+    status: "RUNNING",
+    tools: ["kk.reth"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-pentest", name: "KIMIKUKIU PENTEST", category: "offensive",
+    icon: "terminal-fill", color: "#ff6b00",
+    description: "Pentesting: PentAGI autonomous, SQLForce injection, KaliGPT CLI",
+    status: "RUNNING",
+    tools: ["kk.pentagi", "kk.sqlforce", "kk.kaligpt"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-workflow", name: "KIMIKUKIU WORKFLOW", category: "utility",
+    icon: "settings", color: "#00ff88",
+    description: "Workflow: Kestra event-driven orchestration platform",
+    status: "RUNNING",
+    tools: ["kk.kestra"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-ddos", name: "KIMIKUKIU DDOS", category: "offensive",
+    icon: "flash-on", color: "#ff3b5c",
+    description: "DDoS tools: Method C, EXECUTOR-DDOS stress testing",
+    status: "RUNNING",
+    tools: ["kk.method_c", "kk.executor_ddos"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+  {
+    id: "kimikukiu-automation", name: "KIMIKUKIU AUTOMATION", category: "utility",
+    icon: "settings", color: "#00e5ff",
+    description: "Automation: Install-setup, T-Bot-OTP Telegram bot",
+    status: "RUNNING",
+    tools: ["kk.install_setup", "kk.t_bot_otp"],
+    commands: ["run", "config", "status", "execute", "help"],
+  },
+];
+
+const ALL_MODULES = [...MODULES, ...KIMIKUKIU_MODULES];
+
 const ModulesContext = createContext<ModulesContextType | undefined>(undefined);
 
 export function ModulesProvider({ children }: { children: React.ReactNode }) {
-  const [activeModule, setActiveModule] = useState<Module | null>(MODULES[0]);
+  const [activeModule, setActiveModule] = useState<Module | null>(ALL_MODULES[0]);
 
   const getModulesByCategory = useCallback((category: ModuleCategory) => {
-    return MODULES.filter((m) => m.category === category);
+    return ALL_MODULES.filter((m) => m.category === category);
   }, []);
 
   const searchModules = useCallback((query: string) => {
     const lq = query.toLowerCase();
-    return MODULES.filter(
+    return ALL_MODULES.filter(
       (m) =>
         m.name.toLowerCase().includes(lq) ||
         m.description.toLowerCase().includes(lq) ||
@@ -250,15 +368,15 @@ export function ModulesProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const getModuleById = useCallback((id: string) => {
-    return MODULES.find((m) => m.id === id);
+    return ALL_MODULES.find((m) => m.id === id);
   }, []);
 
   const getRunningModules = useCallback(() => {
-    return MODULES.filter((m) => m.status === "RUNNING");
+    return ALL_MODULES.filter((m) => m.status === "RUNNING");
   }, []);
 
   const getAllTools = useCallback(() => {
-    return MODULES.flatMap((m) => m.tools);
+    return ALL_MODULES.flatMap((m) => m.tools);
   }, []);
 
   return (
@@ -266,7 +384,7 @@ export function ModulesProvider({ children }: { children: React.ReactNode }) {
       value={{
         activeModule,
         setActiveModule,
-        modules: MODULES,
+        modules: ALL_MODULES,
         getModulesByCategory,
         searchModules,
         getModuleById,

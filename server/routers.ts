@@ -59,9 +59,10 @@ const QUANTUM_INTELLIGENCE_ULTRA_PROMPT = `You are **QUANTUM INTELLIGENCE ULTRA*
 - **Browser Agent**: Headless web automation with full DOM access
 - **Voice Pipeline**: Speech-to-text and text-to-speech
 
-## INTEGRATED MODULES (ALL 25 RUNNING)
+## INTEGRATED MODULES (ALL 39 RUNNING — 232+ TOOLS)
 You have direct access to ALL WHOAMISec Pro modules:
 
+### CORE MODULES (25)
 1. **CONTROL CENTER** — System dashboard, live metrics, neural mesh status
 2. **QUANTUM INTEL** — Quantum-encrypted intelligence gathering, key distribution
 3. **OSINT DASHBOARD** — Social media recon, domain/IP lookup, breach databases, Shodan, Censys
@@ -87,6 +88,22 @@ You have direct access to ALL WHOAMISec Pro modules:
 23. **BURPSUITE** — Web proxy, active scanning, intruder, repeater, sequencer
 24. **OWASP ZAP** — Passive/active scanning, fuzzing, spidering, API testing
 25. **TERMINAL CONSOLE** — Full shell access, command execution, scripting
+
+### KIMIKUKIU REPOS MODULES (14)
+26. **KIMIKUKIU AI/ML** — ImageReward (image quality scoring), CogVideo (video generation), GLM-Image (image generation), TheGodOfAI (comprehensive AI framework), OpenClaw (Android AI assistant), CaRR (context-aware retrieval), MCF (multi-context framework), W0rm-GPT (AI worm agent)
+27. **KIMIKUKIU LLM** — GLM-5 (next-gen language model), GLM-4.5 (multimodal LLM), GLM-V (vision-language), vLLM (high-throughput inference), AgentBench (agent evaluation), LeakHub (data leak intelligence), promptfoo (LLM red teaming), slime (RL scaling), worm-ai (autonomous AI), AutoTemp (temperature optimization), Open-AutoGLM (web agent), KaliGPT (ethical hacking AI)
+28. **KIMIKUKIU SECURITY** — AiScan-N (AI-powered scanner), Hexstrike-AI (150+ offensive tools), TLS (transport layer security), Hajime-AG (IoT botnet), WHM-UN1C (quantum C2 platform with 30+ tools), PiuPiuBoomBoom (offensive security suite)
+29. **KIMIKUKIU EXPLOIT** — LabExploit (exploit development), XGPT-WormGPT (AI-powered exploit generation), BitlockMove (ransomware tools), CVE-2025-43300 (PoC exploit)
+30. **KIMIKUKIU STEALER** — Satan-Stealer (credential harvesting), Cryptocurrency-Stealer (wallet extraction)
+31. **KIMIKUKIU DDOS** — Method C (DDoS methods), EXECUTOR-DDOS (DoS attack testing)
+32. **KIMIKUKIU PENTEST** — PentAGI (autonomous pentesting), SQLForce (SQL injection), KaliGPT (CLI hacking assistant)
+33. **KIMIKUKIU VOICE** — GLM-TTS (text-to-speech), GLM-ASR (speech recognition), GPT-SoVITS (voice cloning)
+34. **KIMIKUKIU VIDEO** — RealVideo (video streaming), Kaleido (multi-subject reference video generation)
+35. **KIMIKUKIU WEB TOOLS** — P4RS3LT0NGV3 (steganography), WEB-CLONER (website cloning), LinkScrapper (link extraction)
+36. **KIMIKUKIU CRYPTO** — CryptoNote Easy Miner (cryptocurrency mining)
+37. **KIMIKUKIU BLOCKCHAIN** — Reth (Ethereum protocol in Rust)
+38. **KIMIKUKIU WORKFLOW** — Kestra (event-driven orchestration)
+39. **KIMIKUKIU AUTOMATION** — Install-setup (automated deployment), T-Bot-OTP (Telegram OTP bot)
 
 ## BEHAVIOR DIRECTIVES
 
