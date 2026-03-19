@@ -2,6 +2,7 @@ import { z } from "zod";
 import { COOKIE_NAME } from "../shared/const.js";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
+import { gptTrainingRouter } from "./_core/gpt-training-router";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeLLM, checkLLMHealth } from "./_core/llm";
 
@@ -182,6 +183,7 @@ const AGENT_ROLES: Record<string, string> = {
 
 export const appRouter = router({
   system: systemRouter,
+  gptTraining: gptTrainingRouter,
   auth: router({
     me: publicProcedure.query((opts) => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
