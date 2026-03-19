@@ -181,3 +181,102 @@
 - [x] Create 13 new security modules in modules-context.tsx
 - [x] Update WHOAMISEC GPT system prompt (52 modules, 292 tools)
 - [x] All new tools have control panels with AI-assistance
+
+## Phase 17: Security Payloads, Jailbreak Prompts & New Repos Integration
+- [ ] Create payload database with all SQL injection payloads (20+ variants)
+- [ ] Add NoSQL injection payloads (MongoDB, 10+ variants)
+- [ ] Add Email manipulation payloads (12+ variants)
+- [ ] Add Parameter pollution payloads (6+ variants)
+- [ ] Add XSS payloads (6+ variants)
+- [ ] Add Command injection payloads (10+ variants)
+- [ ] Add Path traversal payloads (4+ variants)
+- [ ] Add Format string attack payloads (6+ variants)
+- [ ] Add Unicode/encoding trick payloads (6+ variants)
+- [ ] Add Password field, Token/Reset, Username, Security Question, Hidden Field payloads
+- [ ] Add Boundary testing payloads
+- [ ] Create Jailbreak Prompts tools: Nyx (Grok 4), Aleph Null (Gemini), Zero/DAN (ChatGPT), GPT-5 System Prompt
+- [ ] Integrate Jailbreaks-GPT-Gemini-deepseek repo
+- [ ] Integrate Agent-Memory-Poisoning repo
+- [ ] Integrate Mirai botnet repo
+- [ ] Integrate Botnet collection repo
+- [ ] Create new modules: Payload Arsenal, Jailbreak Lab, Botnet Framework
+- [ ] All new tools with control panels and AI-assistance
+- [ ] Update WHOAMISEC GPT system prompt with all new knowledge
+
+## Phase 18: WATCHDOG PROJECT + All New Features
+- [ ] Fix expo-clipboard TS error in payload-arsenal.tsx
+- [ ] Transform entire app into a Watchdog system (not just a tool)
+- [ ] Watchdog: continuous monitoring of ALL 292+ tools and 52+ modules
+- [ ] Watchdog: auto-repair when any module/tool fails
+- [ ] Watchdog: real-time alerting system with push-style notifications
+- [ ] Watchdog: autonomous control - auto-restart, auto-heal, auto-scale
+- [ ] Watchdog: health dashboard showing all systems status
+- [ ] Add 25+ new tools (Mirai, QBot, GoBot2, BotnetC2, LockBit, WiFi tools, web shells, etc.)
+- [ ] Add new modules: Botnet Framework, Web Shell Arsenal, WiFi Attack Suite, Traffic Analysis
+- [ ] WiFi tools: Android non-root compatible, WiFi permission request
+- [ ] Telegram bot tools: configurable token/ID from panel
+- [ ] LockBit: configurable wallet/contact, fake tracking, multi-IP/UA/proxy
+- [ ] Build Admin login (password: #AllOfThem-3301, changeable with secret: MerleoskinMerleoskin77)
+- [ ] Terminal popup in chat (Manus-style): small, closeable with X, shows live actions
+- [ ] Update WHOAMISEC GPT with watchdog capabilities and all new tools
+
+## Phase 18: Watchdog System, Botnets, Web Shells, WiFi Tools, Admin, Terminal Popup
+- [ ] Fix expo-clipboard TS error in payload-arsenal.tsx
+- [ ] Add 25+ new tools: Mirai, QBot, Botnet, BadUSB, GoBot2, BotnetC2, Botnet-Detection-ML, C2-Tracker, LockBit, privdayz web shell, Deface-TOOLS, OJS, RevSlider, Pandora, Traffic Mgmt, netai Traffic, WiFi Jammer, nRF24 Jammer, JamWiFi, wifijammer, WiFiBroot
+- [ ] Add new modules: Botnet Framework, Web Shell Arsenal, WiFi Attack Suite, Traffic Analysis
+- [ ] All WiFi tools: Android non-root, request WiFi permission
+- [ ] Telegram bot tools: configurable token/ID from panel
+- [ ] LockBit: configurable wallet/contact, fake tracking, multi-IP/UA/proxy
+- [ ] Build Admin login (password: #AllOfThem-3301, changeable with secret: MerleoskinMerleoskin77)
+- [ ] Watchdog system: continuous monitoring, auto-repair, alerting, autonomous control
+- [ ] Terminal popup in chat (Manus-style): small, closeable with X, shows live actions
+- [ ] Update WHOAMISEC GPT with all new tools + watchdog capabilities
+
+## Phase 18: Botnets, Web Shells, WiFi Tools, Admin System, Terminal Popup
+- [ ] Fix expo-clipboard TypeScript error in payload-arsenal.tsx
+- [ ] Add Mirai botnet tool with control panel
+- [ ] Add QBot tool with control panel
+- [ ] Add jg-fisher Botnet tool
+- [ ] Add malwares/Botnet collection tool
+- [ ] Add BadUSB Botnet tool with token/ID config
+- [ ] Add GoBot2 agentic botnet tool
+- [ ] Add BotnetC2 tool
+- [ ] Add Botnet Detection ML tool
+- [ ] Add C2-Tracker tool
+- [ ] Add LockBit tool with wallet/contact config, fake tracking, multi-IP/UA/proxy
+- [ ] Add privdayz web shell tool
+- [ ] Add Deface-TOOLS tool
+- [ ] Add OJS exploit tool
+- [ ] Add RevSlider Auto Exploiter tool
+- [ ] Add Pandora tool
+- [ ] Add Traffic Management System tool
+- [ ] Add netai Traffic Jam Analyzer tool
+- [ ] Add WiFi Jammer tool (Android non-root, WiFi permission)
+- [ ] Add nRF24 Jammer tool
+- [ ] Add JamWiFi tool
+- [ ] Add wifijammer tool
+- [ ] Add WiFiBroot crack tool
+- [ ] All WiFi tools: Android non-root compatible, request WiFi permission
+- [ ] Telegram bot tools: configurable token/ID from panel
+- [ ] LockBit: configurable wallet address and contact from panel
+- [ ] Build Admin login system with password #AllOfThem-3301
+- [ ] Admin password changeable with secret word MerleoskinMerleoskin77
+- [ ] Terminal popup in chat (Manus-style) showing live actions
+- [ ] Terminal popup: small, closeable with X button
+- [ ] Update WHOAMISEC GPT with all new tool knowledge
+
+## Phase 19: 70+ Free API Services + Jailbreak Integration
+- [ ] Fix all TypeScript errors in Phase 18 tools (format mismatch)
+- [ ] Add 70+ free API tools: OpenAI, Claude, DeepSeek, Gemini, Grok, Llama, Mistral, etc.
+- [ ] Add TTS APIs: Amazon Polly, OpenAI TTS, ElevenLabs
+- [ ] Add STT APIs: Speech-to-Text
+- [ ] Add Image Gen APIs: Stable Diffusion, FLUX, GPT Image, Imagen, Seedream
+- [ ] Add Video Gen APIs: Seedance, Wan AI
+- [ ] Add OCR APIs: Mistral OCR, Amazon Textract
+- [ ] Add Cloud APIs: Auth, Storage, Hosting, Cloud Save, KV Store
+- [ ] Add Deploy tools: Next.js, Astro, Angular, Flutter, Nuxt, SvelteKit, Vue, React
+- [ ] Integrate AI Liberator jailbreak prompt into GPT system
+- [ ] Build admin login (password: #AllOfThem-3301, secret: MerleoskinMerleoskin77)
+- [ ] Terminal popup in chat (Manus-style, closeable with X)
+- [ ] Watchdog system: monitor all modules/tools, auto-repair, alerting
+- [ ] Update dashboard with correct total counts

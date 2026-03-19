@@ -452,7 +452,58 @@ const SECURITY_MODULES: Module[] = [
   },
 ];
 
-const ALL_MODULES = [...MODULES, ...KIMIKUKIU_MODULES, ...SECURITY_MODULES];
+const PHASE18_MODULES: Module[] = [
+  {
+    id: "botnet-framework", name: "BOTNET FRAMEWORK", category: "offensive",
+    description: "Botnet C2, detection, tracking, and simulation tools",
+    icon: "bug-report", color: "#ff3b5c",
+    status: "RUNNING", tools: ["tool-mirai", "tool-qbot", "tool-botnet-jg", "tool-malware-botnet", "tool-badusb-botnet", "tool-gobot2", "tool-botnet-c2", "tool-botnet-detection", "tool-c2-tracker"], commands: [],
+  },
+  {
+    id: "webshell-arsenal", name: "WEB SHELL ARSENAL", category: "offensive",
+    description: "Web shells, defacement tools, and CMS exploiters",
+    icon: "terminal", color: "#ff6b35",
+    status: "RUNNING", tools: ["tool-privdayz", "tool-deface-tools", "tool-ojs-exploit", "tool-revslider"], commands: [],
+  },
+  {
+    id: "wifi-attack", name: "WIFI ATTACK SUITE", category: "offensive",
+    description: "WiFi jamming, cracking, and analysis tools (Android non-root)",
+    icon: "wifi", color: "#00e5ff",
+    status: "RUNNING", tools: ["tool-wifi-jammer", "tool-nrf24-jammer", "tool-jamwifi", "tool-wifijammer", "tool-wifibroot"], commands: [],
+  },
+  {
+    id: "traffic-analysis", name: "TRAFFIC ANALYSIS", category: "intel",
+    description: "Traffic management, analysis, and monitoring systems",
+    icon: "analytics", color: "#a855f7",
+    status: "RUNNING", tools: ["tool-pandora", "tool-traffic-mgmt", "tool-netai-traffic"], commands: [],
+  },
+  {
+    id: "payload-arsenal", name: "PAYLOAD ARSENAL", category: "offensive",
+    description: "SQL injection, XSS, NoSQL, command injection payload database",
+    icon: "security", color: "#ffd700",
+    status: "RUNNING", tools: ["tool-sqli-arsenal", "tool-nosql-arsenal", "tool-xss-arsenal", "tool-cmdi-arsenal", "tool-path-arsenal", "tool-fmtstr-arsenal", "tool-unicode-arsenal", "tool-email-arsenal", "tool-param-pollution", "tool-token-arsenal", "tool-password-arsenal", "tool-hidden-field", "tool-boundary-arsenal", "tool-secq-arsenal", "tool-username-arsenal"], commands: [],
+  },
+  {
+    id: "jailbreak-lab", name: "JAILBREAK LAB", category: "ai",
+    description: "LLM jailbreak prompts, memory poisoning, and bypass techniques",
+    icon: "lock-open", color: "#ff00ff",
+    status: "RUNNING", tools: ["tool-jailbreaks-gpt", "tool-memory-poisoning", "tool-nyx-protocol", "tool-aleph-null", "tool-zero-dan"], commands: [],
+  },
+  {
+    id: "ransomware-framework", name: "RANSOMWARE FRAMEWORK", category: "offensive",
+    description: "Ransomware simulation with configurable wallet/contact and fake tracking",
+    icon: "enhanced-encryption", color: "#ef4444",
+    status: "RUNNING", tools: ["tool-lockbit"], commands: [],
+  },
+  {
+    id: "watchdog-core", name: "WATCHDOG CORE", category: "utility",
+    description: "System-wide monitoring, auto-repair, alerting, and autonomous control",
+    icon: "visibility", color: "#22c55e",
+    status: "RUNNING", tools: ["tool-watchdog-monitor", "tool-watchdog-repair", "tool-watchdog-alert", "tool-watchdog-scheduler", "tool-watchdog-dashboard"], commands: [],
+  },
+];
+
+const ALL_MODULES = [...MODULES, ...KIMIKUKIU_MODULES, ...SECURITY_MODULES, ...PHASE18_MODULES];
 
 const ModulesContext = createContext<ModulesContextType | undefined>(undefined);
 
