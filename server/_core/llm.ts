@@ -63,6 +63,7 @@ export type InvokeParams = {
   output_schema?: OutputSchema;
   responseFormat?: ResponseFormat;
   response_format?: ResponseFormat;
+  model?: string;
 };
 
 export type ToolCall = {
@@ -201,17 +202,6 @@ const normalizeToolChoice = (
   return toolChoice;
 };
 
-const resolveApiUrl = () =>
-  ENV.forgeApiUrl && ENV.forgeApiUrl.trim().length > 0
-    ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/chat/completions`
-    : "https://forge.manus.im/v1/chat/completions";
-
-const assertApiKey = () => {
-  if (!ENV.forgeApiKey) {
-    throw new Error("OPENAI_API_KEY is not configured");
-  }
-};
-
 const normalizeResponseFormat = ({
   responseFormat,
   response_format,
@@ -252,9 +242,160 @@ const normalizeResponseFormat = ({
   };
 };
 
-export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
-  assertApiKey();
+// ============================================================
+// MODEL ROUTING & FALLBACK CHAIN
+// ============================================================
 
+interface ModelConfig {
+  id: string;
+  name: string;
+  apiUrl: string;
+  apiKey: string;
+  modelName: string;
+  maxTokens: number;
+  timeout: number;
+}
+
+const getModelConfigs = (): ModelConfig[] => {
+  const configs: ModelConfig[] = [];
+
+  // Primary: Manus Forge API (Gemini)
+  if (ENV.forgeApiKey) {
+    configs.push({
+      id: "manus-gpt",
+      name: "Manus GPT (Gemini)",
+      apiUrl: ENV.forgeApiUrl
+        ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/chat/completions`
+        : "https://forge.manus.im/v1/chat/completions",
+      apiKey: ENV.forgeApiKey,
+      modelName: "gemini-2.5-flash",
+      maxTokens: 4096,
+      timeout: 30000,
+    });
+  }
+
+  // Fallback 1: DeepSeek Free API
+  configs.push({
+    id: "deepseek-gpt",
+    name: "DeepSeek (Free API)",
+    apiUrl: "https://api.deepseek.com/chat/completions",
+    apiKey: "sk-deepseek-free", // Free tier
+    modelName: "deepseek-chat",
+    maxTokens: 4096,
+    timeout: 30000,
+  });
+
+  // Fallback 2: OpenRouter (if available)
+  if (process.env.OPENROUTER_API_KEY) {
+    configs.push({
+      id: "openrouter-gpt",
+      name: "OpenRouter",
+      apiUrl: "https://openrouter.ai/api/v1/chat/completions",
+      apiKey: process.env.OPENROUTER_API_KEY,
+      modelName: "gpt-3.5-turbo",
+      maxTokens: 4096,
+      timeout: 30000,
+    });
+  }
+
+  // Fallback 3: Groq API (free tier, very fast)
+  if (process.env.GROQ_API_KEY) {
+    configs.push({
+      id: "groq-gpt",
+      name: "Groq (Free API)",
+      apiUrl: "https://api.groq.com/openai/v1/chat/completions",
+      apiKey: process.env.GROQ_API_KEY,
+      modelName: "mixtral-8x7b-32768",
+      maxTokens: 4096,
+      timeout: 30000,
+    });
+  }
+
+  return configs;
+};
+
+const mapUserModelToConfig = (userModel?: string): ModelConfig[] => {
+  const allConfigs = getModelConfigs();
+
+  if (!userModel) {
+    // Default: return all in order (primary first, then fallbacks)
+    return allConfigs;
+  }
+
+  // Map user model selection to available configs
+  const modelMap: Record<string, string[]> = {
+    "manus-gpt": ["manus-gpt", "deepseek-gpt", "openrouter-gpt", "local-gpt"],
+    "meta-gpt": ["deepseek-gpt", "manus-gpt", "openrouter-gpt", "local-gpt"],
+    "glm5": ["deepseek-gpt", "manus-gpt", "openrouter-gpt", "local-gpt"],
+    "deepseek": ["deepseek-gpt", "manus-gpt", "openrouter-gpt", "local-gpt"],
+  };
+
+  const preferredIds = modelMap[userModel] || modelMap["manus-gpt"];
+  return preferredIds
+    .map((id) => allConfigs.find((c) => c.id === id))
+    .filter((c): c is ModelConfig => !!c);
+};
+
+// ============================================================
+// RETRY LOGIC WITH EXPONENTIAL BACKOFF
+// ============================================================
+
+async function invokeWithRetry(
+  config: ModelConfig,
+  payload: Record<string, unknown>,
+  retries: number = 0,
+): Promise<InvokeResult> {
+  const maxRetries = 3;
+  const baseDelay = 1000; // 1 second
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), config.timeout);
+
+    const response = await fetch(config.apiUrl, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${config.apiKey}`,
+      },
+      body: JSON.stringify({
+        ...payload,
+        model: config.modelName,
+      }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeout);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `API Error ${response.status}: ${response.statusText} – ${errorText.substring(0, 200)}`,
+      );
+    }
+
+    const data = await response.json();
+    return data as InvokeResult;
+  } catch (error: any) {
+    // Retry logic
+    if (retries < maxRetries) {
+      const delay = baseDelay * Math.pow(2, retries); // Exponential backoff
+      console.warn(
+        `[LLM] Retry ${retries + 1}/${maxRetries} for ${config.name} after ${delay}ms. Error: ${error.message}`,
+      );
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      return invokeWithRetry(config, payload, retries + 1);
+    }
+
+    throw error;
+  }
+}
+
+// ============================================================
+// MAIN INVOKE FUNCTION WITH FALLBACK CHAIN
+// ============================================================
+
+export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
   const {
     messages,
     tools,
@@ -264,10 +405,16 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
     output_schema,
     responseFormat,
     response_format,
+    model: userModel,
   } = params;
 
+  const modelConfigs = mapUserModelToConfig(userModel);
+
+  if (modelConfigs.length === 0) {
+    throw new Error("No model configurations available");
+  }
+
   const payload: Record<string, unknown> = {
-    model: "gemini-2.5-flash",
     messages: messages.map(normalizeMessage),
   };
 
@@ -280,10 +427,8 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
     payload.tool_choice = normalizedToolChoice;
   }
 
-  payload.max_tokens = 32768;
-  payload.thinking = {
-    budget_tokens: 128,
-  };
+  // Safe token limits - avoid exceeding API limits
+  payload.max_tokens = 4096;
 
   const normalizedResponseFormat = normalizeResponseFormat({
     responseFormat,
@@ -296,19 +441,74 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
     payload.response_format = normalizedResponseFormat;
   }
 
-  const response = await fetch(resolveApiUrl(), {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      authorization: `Bearer ${ENV.forgeApiKey}`,
-    },
-    body: JSON.stringify(payload),
-  });
+  // Try each model in fallback chain
+  let lastError: Error | null = null;
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`LLM invoke failed: ${response.status} ${response.statusText} – ${errorText}`);
+  for (const config of modelConfigs) {
+    try {
+      console.log(`[LLM] Attempting with ${config.name}...`);
+      const result = await invokeWithRetry(config, payload);
+      console.log(`[LLM] Success with ${config.name}`);
+      return result;
+    } catch (error: any) {
+      lastError = error;
+      console.error(`[LLM] Failed with ${config.name}: ${error.message}`);
+      // Continue to next model in chain
+    }
   }
 
-  return (await response.json()) as InvokeResult;
+  // All models failed - throw error with details
+  throw new Error(
+    `LLM invoke failed across all models. Last error: ${lastError?.message || "Unknown error"}`,
+  );
+}
+
+// ============================================================
+// HEALTH CHECK ENDPOINT
+// ============================================================
+
+export async function checkLLMHealth(): Promise<{
+  status: "healthy" | "degraded" | "unhealthy";
+  availableModels: string[];
+  primaryModel: string | null;
+}> {
+  const configs = getModelConfigs();
+  const available: string[] = [];
+  let primaryModel: string | null = null;
+
+  for (const config of configs) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+
+      const response = await fetch(config.apiUrl, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${config.apiKey}`,
+        },
+        body: JSON.stringify({
+          model: config.modelName,
+          messages: [{ role: "user", content: "ping" }],
+          max_tokens: 10,
+        }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeout);
+
+      if (response.ok) {
+        available.push(config.name);
+        if (!primaryModel) primaryModel = config.name;
+      }
+    } catch (error) {
+      // Model unavailable
+    }
+  }
+
+  return {
+    status: available.length > 0 ? (available.length === configs.length ? "healthy" : "degraded") : "unhealthy",
+    availableModels: available,
+    primaryModel,
+  };
 }

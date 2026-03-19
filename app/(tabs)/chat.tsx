@@ -72,6 +72,7 @@ export default function ChatScreen() {
     },
   ]);
   const [input, setInput] = useState("");
+  const [inputHeight, setInputHeight] = useState(40);
   const [loading, setLoading] = useState(false);
   const [activeRole, setActiveRole] = useState<AgentRole | null>(null);
   const [activeModel, setActiveModel] = useState("manus-gpt");
@@ -374,7 +375,7 @@ export default function ChatScreen() {
       {/* ===== INPUT AREA ===== */}
       <View style={s.inputArea}>
         {/* Quick Module Commands */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 5, paddingBottom: 6, paddingHorizontal: 2 }}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 5, paddingBottom: 6, paddingHorizontal: 2 }} scrollEnabled={true}>
           {[
             { label: "🔧 Self-Repair", cmd: "/repair Diagnose and fix all current issues" },
             { label: "📊 Status", cmd: "/status Show all 25 module statuses" },
@@ -399,14 +400,19 @@ export default function ChatScreen() {
           <TextInput
             value={input}
             onChangeText={setInput}
+            onContentSizeChange={(e) => {
+              const newHeight = Math.min(Math.max(e.nativeEvent.contentSize.height, 40), 200);
+              setInputHeight(newHeight);
+            }}
             placeholder="Enter task for Neural Swarm..."
             placeholderTextColor="#4b5563"
             multiline
             maxLength={4000}
             editable={!loading}
-            style={s.textInput}
+            style={[s.textInput, { height: inputHeight }]}
             onSubmitEditing={sendMessage}
             returnKeyType="send"
+            scrollEnabled
           />
           <Pressable
             onPress={sendMessage}
@@ -464,12 +470,12 @@ const s = StyleSheet.create({
   loadingRow: { flexDirection: "row", justifyContent: "flex-start" },
   loadingBubble: { backgroundColor: "#111827", borderWidth: 1, borderColor: "#00ff8830", borderRadius: 10, padding: 10, flexDirection: "row", alignItems: "center", gap: 8 },
   loadingText: { fontSize: 11, color: "#00ff88", fontFamily: mono },
-  inputArea: { borderTopWidth: 1, borderTopColor: "#1e293b", paddingHorizontal: 10, paddingTop: 6, paddingBottom: 10 },
+  inputArea: { borderTopWidth: 1, borderTopColor: "#1e293b", paddingHorizontal: 10, paddingTop: 6, paddingBottom: 10, maxHeight: "40%" },
   quickCmd: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 5, borderWidth: 1, borderColor: "#1e293b", backgroundColor: "#0d1117" },
   quickCmdText: { fontSize: 10, color: "#00e5ff", fontFamily: mono },
-  inputRow: { flexDirection: "row", gap: 8, alignItems: "flex-end" },
-  textInput: { flex: 1, backgroundColor: "#0d1117", color: "#e0e7ff", borderWidth: 1, borderColor: "#1e293b", borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, fontFamily: mono, fontSize: 13, maxHeight: 100 },
-  sendBtn: { width: 44, height: 44, borderRadius: 10, justifyContent: "center", alignItems: "center" },
+  inputRow: { flexDirection: "row", gap: 8, alignItems: "flex-end", maxHeight: 220 },
+  textInput: { flex: 1, backgroundColor: "#0d1117", color: "#e0e7ff", borderWidth: 1, borderColor: "#1e293b", borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, fontFamily: mono, fontSize: 13, minHeight: 40, maxHeight: 200 },
+  sendBtn: { width: 44, minHeight: 44, borderRadius: 10, justifyContent: "center", alignItems: "center" },
   sendBtnText: { fontSize: 16, fontWeight: "bold", color: "#0a0e17" },
   statusBar: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 5, marginTop: 6 },
   statusDot: { width: 5, height: 5, borderRadius: 3 },
