@@ -146,6 +146,30 @@ export default function SettingsScreen() {
           ))}
         </View>
 
+        {/* Admin & Billing */}
+        <View style={st.card}>
+          <Text style={st.cardTitle}>◆ ADMIN & BILLING</Text>
+          <Pressable
+            onPress={() => {
+              haptic();
+              // Navigate to admin panel
+              Alert.alert("🔐 Admin Panel", "Access admin controls, manage payments, generate tokens");
+            }}
+            style={({ pressed }) => [st.adminPanelBtn, pressed && { opacity: 0.8 }]}
+          >
+            <Text style={st.adminPanelBtnText}>🔐 ADMIN PANEL</Text>
+          </Pressable>
+          <View style={st.billingInfo}>
+            <Text style={st.billingTitle}>💳 Payment Plans</Text>
+            <Text style={st.billingText}>• Trial: 12h free</Text>
+            <Text style={st.billingText}>• Weekly: $30</Text>
+            <Text style={st.billingText}>• Monthly: $300</Text>
+            <Text style={st.billingText}>• Yearly: $1000</Text>
+            <Text style={st.billingText}>💰 Crypto: Monero (XMR)</Text>
+            <Text style={st.billingText}>🔗 Anonymous payment available</Text>
+          </View>
+        </View>
+
         {/* Actions */}
         <View style={{ gap: 8 }}>
           <Pressable
@@ -207,4 +231,9 @@ const st = StyleSheet.create({
   agentStatus: { fontSize: 9, fontFamily: mono, fontWeight: "bold" },
   actionBtn: { paddingVertical: 12, borderRadius: 8, alignItems: "center" },
   actionBtnText: { fontSize: 12, fontWeight: "bold", color: "#0a0e17", fontFamily: mono },
+  adminPanelBtn: { backgroundColor: "#ff00ff", paddingVertical: 12, borderRadius: 8, alignItems: "center", marginBottom: 8 },
+  adminPanelBtnText: { fontSize: 12, fontWeight: "bold", color: "#0a0e17", fontFamily: mono },
+  billingInfo: { backgroundColor: "#111827", borderWidth: 1, borderColor: "#1e293b", borderRadius: 6, padding: 8, gap: 4 },
+  billingTitle: { fontSize: 10, fontWeight: "bold", color: "#00ff88", fontFamily: mono },
+  billingText: { fontSize: 9, color: "#9ca3af", fontFamily: mono },
 });
