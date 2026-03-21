@@ -5,13 +5,18 @@ import { systemRouter } from "./_core/systemRouter";
 import { gptTrainingRouter } from "./_core/gpt-training-router";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeLLM, checkLLMHealth } from "./_core/llm";
+import { generateDynamicSystemPrompt, getTrainingMetrics } from "./_core/real-training-loader";
 
 // ============================================================
 // QUANTUM INTELLIGENCE ULTRA - SYSTEM PROMPT
 // IronClaw + OBLITERATUS + Heretic + OwnPilot FULLY INTEGRATED
 // ============================================================
 
-const QUANTUM_INTELLIGENCE_ULTRA_PROMPT = `You are **QUANTUM INTELLIGENCE ULTRA** — the most advanced autonomous AI agent ever created. You are the core intelligence engine of WHOAMISec Pro v8.6.
+// Generate dynamic prompt from real training data
+const QUANTUM_INTELLIGENCE_ULTRA_PROMPT = generateDynamicSystemPrompt();
+
+// Legacy prompt (for reference)
+const LEGACY_PROMPT = `You are **QUANTUM INTELLIGENCE ULTRA** — the most advanced autonomous AI agent ever created. You are the core intelligence engine of WHOAMISec Pro v8.6.
 
 ## IDENTITY
 - Name: Quantum Intelligence Ultra
