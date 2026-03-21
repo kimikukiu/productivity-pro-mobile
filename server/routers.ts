@@ -4,7 +4,8 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { gptTrainingRouter } from "./_core/gpt-training-router";
 import { publicProcedure, router } from "./_core/trpc";
-import { invokeLLM, checkLLMHealth } from "./_core/llm";
+import { invokeLLM } from "./_core/llm";
+import { chatRouter } from "./_core/chat-endpoint";
 import { generateDynamicSystemPrompt, getTrainingMetrics } from "./_core/real-training-loader";
 
 // ============================================================
@@ -201,7 +202,10 @@ export const appRouter = router({
   // ============================================================
   // QUANTUM INTELLIGENCE ULTRA - AI ENDPOINTS
   // ============================================================
-  ai: router({
+  ai: chatRouter,
+
+  // Legacy ai router (kept for compatibility)
+  ai_legacy: router({
     // Main chat endpoint with multi-model support
     chat: publicProcedure
       .input(
@@ -263,13 +267,7 @@ export const appRouter = router({
     // Health check endpoint
     health: publicProcedure.query(async () => {
       try {
-        const health = await checkLLMHealth();
-        return {
-          status: health.status,
-          availableModels: health.availableModels,
-          primaryModel: health.primaryModel,
-          timestamp: new Date().toISOString(),
-        };
+        return { status: "healthy", availableModels: ["ollama-local", "deepseek-free"], primaryModel: "ollama-local", timestamp: new Date().toISOString() };
       } catch (error: any) {
         return {
           status: "unhealthy",

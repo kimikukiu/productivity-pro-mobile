@@ -280,3 +280,84 @@
 - [ ] Terminal popup in chat (Manus-style, closeable with X)
 - [ ] Watchdog system: monitor all modules/tools, auto-repair, alerting
 - [ ] Update dashboard with correct total counts
+
+
+## PHASE 20: MANDATORY ADMIN LOGIN + SUBSCRIBER SYSTEM + TOOL CONTROL PANELS (CURRENT)
+
+### Admin Login System
+- [ ] Create login screen that appears on app start
+- [ ] Admin password: #AllOfThem-3301
+- [ ] Session management for admin authentication
+- [ ] Redirect non-admin users to login screen
+- [ ] Add logout button in admin panel
+
+### Admin Control Panel (Separate Tab)
+- [ ] Create dedicated Admin Panel tab
+- [ ] Display admin statistics and system info
+- [ ] Password change feature with secret validation (MerleoskinMerleoskin77)
+- [ ] Token generation UI for each subscription plan
+- [ ] Show all active tokens and expiration dates
+- [ ] User management interface
+- [ ] System monitoring and health status
+
+### Subscriber System
+- [ ] Create user token validation on app start
+- [ ] Lock all features for users without valid token
+- [ ] Show "Locked - Generate Token" message for non-subscribers
+- [ ] Display subscription status and expiration countdown
+- [ ] Create token input screen for users
+- [ ] Implement token verification backend
+
+### Subscription Plans & Payment
+- [ ] Plan 1: 12h trial - FREE
+- [ ] Plan 2: Weekly - $30
+- [ ] Plan 3: Monthly - $300
+- [ ] Plan 4: Yearly - $1000
+- [ ] Monero payment address: 8BbApiMBHsPVKkLEP4rVbST6CnSb3LW2gXygngCi5MGiBuwAFh6bFEzT3UTuFCkLHtyHnrYNnHycdaGb2Kgkkmw8jViCdB6
+- [ ] Anonymous payment method fallback
+- [ ] Payment confirmation and token auto-generation
+
+### Tool Control Panels (Separate Full Pages)
+- [ ] XGPT-WormGPT - Full control panel page
+- [ ] Hexstrike-AI - Full control panel page
+- [ ] worm-ai - Full control panel page
+- [ ] W0rm-Gpt - Full control panel page
+- [ ] kestra - Full control panel page
+- [ ] MHDDoS - Full control panel page
+- [ ] sqlforce - Full control panel page
+- [ ] ids-inf - Full control panel page
+- [ ] AGL-Stress - Full control panel page
+- [ ] YuiPanel_ir - Full control panel page
+- [ ] Remaining 17 repositories - Full control panel pages each
+- [ ] Each tool page with: parameters, execute button, status, results, AI assistance
+- [ ] Tool-specific configuration options
+- [ ] Real-time execution monitoring
+- [ ] Result display and export functionality
+
+### Repository Integration (27 Total)
+- [ ] Verify all 27 repos cloned and processed
+- [ ] Extract all tools and capabilities
+- [ ] Integrate training data into GPT
+- [ ] Add repository status monitoring
+- [ ] Implement auto-sync for updates
+- [ ] Create repository management interface
+
+### GPT/LLM Fixes (CRITICAL)
+- [ ] Fix tRPC input parsing issue for chat endpoint
+- [ ] Implement REST endpoint as fallback
+- [ ] Test with real models (Ollama, DeepSeek)
+- [ ] Verify multi-model fallback works
+- [ ] Test 24/7 continuous operation
+- [ ] Implement error recovery and auto-restart
+
+### Testing & Deployment
+- [ ] Test admin login flow (password #AllOfThem-3301)
+- [ ] Test password change with secret (MerleoskinMerleoskin77)
+- [ ] Test subscriber token validation
+- [ ] Test all 27 tool pages load and function
+- [ ] Test GPT chat with real models
+- [ ] Test payment system
+- [ ] Deploy to GitHub (kimikukiu)
+- [ ] Deploy to Vercel
+- [ ] Generate APK for mobile
+- [ ] Verify all 4 protocols active
