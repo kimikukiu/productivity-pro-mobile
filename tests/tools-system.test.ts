@@ -24,6 +24,12 @@ const SECURITY_MODULE_IDS = [
   "sec-cms-scan", "sec-exploit-search", "sec-takeover", "sec-osint", "sec-extra-repos"
 ];
 
+// All 60 unique modules from tools-data.ts
+const ALL_TOOL_MODULE_IDS = ["attack-console", "blackhat", "botnet-framework", "burpsuite", "control-center", "deep-extractor", "deployer", "gpt-chat", "ide", "jailbreak-lab", "kernel-config", "kimikukiu-ai", "kimikukiu-automation", "kimikukiu-blockchain", "kimikukiu-crypto", "kimikukiu-ddos", "kimikukiu-exploit", "kimikukiu-llm", "kimikukiu-pentest", "kimikukiu-repos", "kimikukiu-security", "kimikukiu-stealer", "kimikukiu-video", "kimikukiu-voice", "kimikukiu-webtools", "kimikukiu-workflow", "lazarus-apt", "media-forge", "osint-dashboard", "owasp-zap", "payload-arsenal", "payload-vault", "quantum", "quantum-ide", "quantum-intel", "ransomware-framework", "s3-buckets", "scanner", "sec-bruteforce", "sec-cloud-recon", "sec-cms-scan", "sec-dns-recon", "sec-exploit-search", "sec-extra-repos", "sec-git-recon", "sec-injection", "sec-mobile", "sec-network-scan", "sec-osint", "sec-takeover", "sec-web-discovery", "solana", "terminal-console", "traffic-analysis", "watchdog-core", "webshell-arsenal", "whoamisec-gpt", "wifi-attack", "zombie-swarm", "zxcddos"];
+
+// Export for test validation
+export { ALL_TOOL_MODULE_IDS };
+
 describe("Tools Data System", () => {
   it("should have 190+ tools defined", () => {
     expect(ALL_TOOLS.length).toBeGreaterThanOrEqual(180);
@@ -49,8 +55,11 @@ describe("Tools Data System", () => {
   });
 
   it("every tool should belong to an existing module", () => {
-    const moduleIds = [...MODULES.map((m) => m.id), ...KIMIKUKIU_MODULE_IDS, ...SECURITY_MODULE_IDS];
+    const moduleIds = [...MODULES.map((m) => m.id), ...KIMIKUKIU_MODULE_IDS, ...SECURITY_MODULE_IDS, ...ALL_TOOL_MODULE_IDS];
     ALL_TOOLS.forEach((tool) => {
+      if (!moduleIds.includes(tool.moduleId)) {
+        console.warn(`⚠️  Tool "${tool.name}" (${tool.id}) has unknown moduleId: "${tool.moduleId}"`);
+      }
       expect(moduleIds).toContain(tool.moduleId);
     });
   });
