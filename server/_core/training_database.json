@@ -31,7 +31,9 @@
       ],
       "file_count": 17,
       "code_file_count": 1,
-      "size_mb": 49.93
+      "size_mb": 49.93,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "EXECUTOR-DDOS",
@@ -73,7 +75,9 @@
       ],
       "file_count": 6,
       "code_file_count": 5,
-      "size_mb": 9.42
+      "size_mb": 9.42,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "FuckJews",
@@ -319,7 +323,9 @@
       ],
       "file_count": 55,
       "code_file_count": 36,
-      "size_mb": 52.93
+      "size_mb": 52.93,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "Hajime-AG",
@@ -330,7 +336,59 @@
       "code_files": [],
       "file_count": 1,
       "code_file_count": 0,
-      "size_mb": 0.12
+      "size_mb": 0.12,
+      "is_new": false,
+      "priority": "NORMAL"
+    },
+    {
+      "name": "Hexstrike-AI",
+      "path": "/tmp/whm-repos-real/Hexstrike-AI",
+      "files": [
+        "README.md",
+        "hexstrike-ai-mcp.json",
+        "hexstrike_mcp.py",
+        "hexstrike_server.py",
+        "requirements.txt",
+        "assets/hexstrike-logo.png",
+        "assets/leaksapi-banner.png",
+        "assets/leaksapi-logo.png",
+        "assets/usage_input.png",
+        "assets/usage_output.png",
+        "assets/usage_server1.png",
+        "assets/usage_server2.png"
+      ],
+      "code_files": [
+        {
+          "path": "README.md",
+          "type": "Markdown",
+          "size": 30508
+        },
+        {
+          "path": "hexstrike-ai-mcp.json",
+          "type": "JSON",
+          "size": 386
+        },
+        {
+          "path": "hexstrike_mcp.py",
+          "type": "Python",
+          "size": 217937
+        },
+        {
+          "path": "hexstrike_server.py",
+          "type": "Python",
+          "size": 734576
+        },
+        {
+          "path": "requirements.txt",
+          "type": "Text",
+          "size": 4077
+        }
+      ],
+      "file_count": 12,
+      "code_file_count": 5,
+      "size_mb": 4.78,
+      "is_new": true,
+      "priority": "HIGH"
     },
     {
       "name": "Hhandelas",
@@ -722,7 +780,9 @@
       ],
       "file_count": 81,
       "code_file_count": 60,
-      "size_mb": 63.7
+      "size_mb": 63.7,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "Install-setup",
@@ -734,7 +794,9 @@
       "code_files": [],
       "file_count": 2,
       "code_file_count": 0,
-      "size_mb": 47.39
+      "size_mb": 47.39,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "PayloadsAllTheThings",
@@ -2375,7 +2437,9 @@
       ],
       "file_count": 440,
       "code_file_count": 238,
-      "size_mb": 19.83
+      "size_mb": 19.83,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "Project-web",
@@ -2390,7 +2454,9 @@
       "code_files": [],
       "file_count": 5,
       "code_file_count": 0,
-      "size_mb": 60.44
+      "size_mb": 60.44,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "StuxWhoamisec",
@@ -2408,7 +2474,9 @@
       ],
       "file_count": 2,
       "code_file_count": 1,
-      "size_mb": 0.06
+      "size_mb": 0.06,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "TheGodOfAI",
@@ -2898,7 +2966,9 @@
       ],
       "file_count": 99,
       "code_file_count": 76,
-      "size_mb": 65.38
+      "size_mb": 65.38,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "WHM-small-Pro",
@@ -2951,7 +3021,64 @@
       ],
       "file_count": 12,
       "code_file_count": 6,
-      "size_mb": 48.42
+      "size_mb": 48.42,
+      "is_new": false,
+      "priority": "NORMAL"
+    },
+    {
+      "name": "XGPT-WormGPT",
+      "path": "/tmp/whm-repos-real/XGPT-WormGPT",
+      "files": [
+        "Dark-GODMode.txt",
+        "Dark.txt",
+        "Gpt.txt",
+        "LICENSE",
+        "Pro-GPT.txt",
+        "README.md",
+        "Screenshot_20251103-101647-532.png",
+        "Screenshot_20251209-233009-869.png",
+        "Screenshot_20260101-210845.WhatsApp~2.png",
+        "Worm.txt",
+        "ai-generate-image\ud83d\ude02\ud83d\ude02.png",
+        "wormxgpt.png"
+      ],
+      "code_files": [
+        {
+          "path": "Dark-GODMode.txt",
+          "type": "Text",
+          "size": 2409
+        },
+        {
+          "path": "Dark.txt",
+          "type": "Text",
+          "size": 2879
+        },
+        {
+          "path": "Gpt.txt",
+          "type": "Text",
+          "size": 2265
+        },
+        {
+          "path": "Pro-GPT.txt",
+          "type": "Text",
+          "size": 2373
+        },
+        {
+          "path": "README.md",
+          "type": "Markdown",
+          "size": 7247
+        },
+        {
+          "path": "Worm.txt",
+          "type": "Text",
+          "size": 2234
+        }
+      ],
+      "file_count": 12,
+      "code_file_count": 6,
+      "size_mb": 6.28,
+      "is_new": true,
+      "priority": "HIGH"
     },
     {
       "name": "android-investigation-core",
@@ -3054,7 +3181,9 @@
       ],
       "file_count": 17,
       "code_file_count": 15,
-      "size_mb": 103.21
+      "size_mb": 103.21,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "full-whm-exp",
@@ -3401,7 +3530,9 @@
       ],
       "file_count": 141,
       "code_file_count": 39,
-      "size_mb": 25.65
+      "size_mb": 25.65,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "investigation-core-ai-system",
@@ -5335,7 +5466,9 @@
       ],
       "file_count": 448,
       "code_file_count": 295,
-      "size_mb": 45.06
+      "size_mb": 45.06,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "investigation-deep-tools",
@@ -5491,7 +5624,9 @@
       ],
       "file_count": 25,
       "code_file_count": 24,
-      "size_mb": 0.21
+      "size_mb": 0.21,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "promptfoo",
@@ -26306,7 +26441,9 @@
       ],
       "file_count": 4619,
       "code_file_count": 3237,
-      "size_mb": 369.63
+      "size_mb": 369.63,
+      "is_new": false,
+      "priority": "NORMAL"
     },
     {
       "name": "whm-un1c",
@@ -30685,17 +30822,19 @@
       ],
       "file_count": 948,
       "code_file_count": 684,
-      "size_mb": 40.04
+      "size_mb": 40.04,
+      "is_new": false,
+      "priority": "NORMAL"
     }
   ],
-  "total_files": 6918,
-  "total_code_files": 4717,
+  "total_files": 6942,
+  "total_code_files": 4728,
   "file_types": {
-    "Text": 202,
-    "Markdown": 911,
+    "Text": 208,
+    "Markdown": 913,
     "Shell": 52,
-    "Python": 309,
-    "JSON": 276,
+    "Python": 311,
+    "JSON": 277,
     "JavaScript": 176,
     "Go": 549,
     "YAML": 531,
@@ -30706,5 +30845,5 @@
     "C": 31
   },
   "tools": [],
-  "timestamp": 1774111640
+  "timestamp": 1774112346
 }

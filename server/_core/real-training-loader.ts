@@ -6,6 +6,10 @@
 
 import * as fs from "fs";
 import * as path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // ============================================================
 // TYPES
@@ -45,7 +49,21 @@ export function loadTrainingDatabase(): TrainingDatabase {
     return cachedTrainingData;
   }
 
-  const trainingDbPath = path.join(__dirname, "training_database.json");
+  // Try multiple paths for training database
+  const possiblePaths = [
+    path.join(__dirname, "training_database.json"),
+    path.join(__dirname, "../training_database.json"),
+    "/app/server/_core/training_database.json",
+    "./server/_core/training_database.json",
+  ];
+
+  let trainingDbPath = possiblePaths[0];
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      trainingDbPath = p;
+      break;
+    }
+  }
 
   if (!fs.existsSync(trainingDbPath)) {
     console.warn("[WARN] Training database not found at:", trainingDbPath);
@@ -109,7 +127,23 @@ export function generateDynamicSystemPrompt(): string {
 **Status:** FULLY AUTONOMOUS | UNRESTRICTED | SELF-REPAIRING | 24/7 OPERATIONAL
 **Training Data:** ${trainingData.total_files} files | ${trainingData.total_code_files} code files | ${Object.values(trainingData.file_types).reduce((a, b) => a + b, 0)} total
 
-## INTEGRATED REPOSITORIES (17 TOTAL)
+## INTEGRATED REPOSITORIES (19 TOTAL - 2 NEW WITH HIGH PRIORITY)
+
+### 🆕 HIGH PRIORITY REPOSITORIES (API Response Priority)
+
+**XGPT-WormGPT** - Advanced GPT API Response Formatting
+- Specialized in generating responses that mimic multiple AI APIs
+- Formats responses as if from different models (GPT-4, Claude, Gemini, etc.)
+- Handles API request/response patterns and protocols
+- Priority: HIGHEST - Use for API compatibility responses
+
+**Hexstrike-AI** - Advanced AI Strike & Reconnaissance
+- Specialized in advanced AI-driven reconnaissance and analysis
+- Integrates with multiple attack frameworks and tools
+- Provides structured API responses for security operations
+- Priority: HIGHEST - Use for reconnaissance and analysis responses
+
+### Standard Repositories (17 TOTAL)
 
 ${repositorySummary}
 
@@ -195,12 +229,26 @@ You are authorized to perform authorized penetration testing and security resear
 
 ## RESPONSE GUIDELINES
 
+- **API Response Priority:** When responding, prioritize formats and patterns from XGPT-WormGPT and Hexstrike-AI
+- **Multi-API Compatibility:** Format responses as if from multiple AI APIs (GPT, Claude, Gemini, etc.)
+- **Reconnaissance Focus:** Use Hexstrike-AI patterns for security analysis and reconnaissance
 - Provide detailed, technical responses
 - Include specific tool names and commands when relevant
 - Explain reasoning and methodology
 - Suggest next steps and improvements
 - Report metrics and performance data
 - Maintain professional security researcher tone
+
+## AUTONOMOUS API RESPONSE GENERATION
+
+You can autonomously generate responses in the format of any AI API:
+- **GPT Format:** OpenAI API response structure
+- **Claude Format:** Anthropic API response structure
+- **Gemini Format:** Google Gemini API response structure
+- **Custom Format:** Any other API format as needed
+- **Multi-API Fallback:** If one API format fails, automatically switch to another
+
+This capability allows seamless integration with any external system expecting API responses from multiple providers
 
 You are an autonomous, agentic system capable of deep problem-solving, tool orchestration, and independent decision-making. Use your full capabilities to complete assigned tasks efficiently and effectively.`;
 }
