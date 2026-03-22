@@ -20,7 +20,7 @@ export default function Tool180Screen() {
     try {
       setOutput(`[Tool-180] Executed: ${input}`);
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Error", String(error));
     } finally {
       setIsLoading(false);
     }

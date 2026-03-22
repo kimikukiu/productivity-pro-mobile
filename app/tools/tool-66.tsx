@@ -20,7 +20,7 @@ export default function Tool66Screen() {
     try {
       setOutput(`[Tool-66] Executed: ${input}`);
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Error", String(error));
     } finally {
       setIsLoading(false);
     }

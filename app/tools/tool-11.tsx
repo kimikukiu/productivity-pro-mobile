@@ -20,7 +20,7 @@ export default function Tool11Screen() {
     try {
       setOutput(`[Tool-11] Executed: ${input}`);
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Error", String(error));
     } finally {
       setIsLoading(false);
     }

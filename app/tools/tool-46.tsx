@@ -20,7 +20,7 @@ export default function Tool46Screen() {
     try {
       setOutput(`[Tool-46] Executed: ${input}`);
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Error", String(error));
     } finally {
       setIsLoading(false);
     }

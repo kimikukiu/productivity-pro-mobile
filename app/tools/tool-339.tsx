@@ -20,7 +20,7 @@ export default function Tool339Screen() {
     try {
       setOutput(`[Tool-339] Executed: ${input}`);
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Error", String(error));
     } finally {
       setIsLoading(false);
     }
