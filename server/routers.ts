@@ -4,7 +4,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { gptTrainingRouter } from "./_core/gpt-training-router";
 import { publicProcedure, router } from "./_core/trpc";
-import { invokeWorkingLLM } from "./_core/llm-working";
+import { invokeGPTWrapper } from "./_core/gpt-wrapper";
 import { chatRouter } from "./_core/chat-endpoint";
 import { generateDynamicSystemPrompt, getTrainingMetrics } from "./_core/real-training-loader";
 
@@ -240,7 +240,7 @@ export const appRouter = router({
           ];
 
           // Invoke LLM with multi-model fallback and retry logic
-          const response = await invokeWorkingLLM(allMessages, {
+          const response = await invokeGPTWrapper(allMessages, {
             model: input.model,
           });
 
@@ -292,7 +292,7 @@ export const appRouter = router({
         try {
           const modulePrompt = `${QUANTUM_INTELLIGENCE_ULTRA_PROMPT}\n\n## ACTIVE MODULE: ${input.moduleName}\nThe user is running the ${input.moduleName} module. Execute the following command within the context of this module. Provide realistic, detailed output as if the module is actually running. Include timestamps, status indicators, and technical details.\n\nModule: ${input.moduleName}\nCommand: ${input.command}\nParameters: ${JSON.stringify(input.params || {})}`;
 
-          const response = await invokeWorkingLLM([
+          const response = await invokeGPTWrapper([
               { role: "system", content: modulePrompt },
               { role: "user", content: input.command },
             ]);
@@ -320,7 +320,7 @@ export const appRouter = router({
       .input(z.object({ issue: z.string(), context: z.string().optional() }))
       .mutation(async ({ input }) => {
         try {
-          const response = await invokeWorkingLLM([
+          const response = await invokeGPTWrapper([
               {
                 role: "system",
                 content: `${QUANTUM_INTELLIGENCE_ULTRA_PROMPT}\n\n## SELF-REPAIR MODE ACTIVE\nDiagnose and fix the following issue. Provide:\n1. DIAGNOSIS\n2. ROOT CAUSE\n3. FIX (step-by-step)\n4. PREVENTION\n5. STATUS`,

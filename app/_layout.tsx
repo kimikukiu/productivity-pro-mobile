@@ -10,6 +10,7 @@ import "@/lib/_core/nativewind-pressable";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { ModulesProvider } from "@/lib/modules-context";
 import { AuthProvider } from "@/lib/auth-context";
+import { AdminLoginCorner } from "@/components/admin-login-corner";
 import {
   SafeAreaFrameContext,
   SafeAreaInsetsContext,
@@ -83,6 +84,7 @@ export default function RootLayout() {
   const content = (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>
+        <AdminLoginCorner />
         <ModulesProvider>
           <trpc.Provider client={trpcClient} queryClient={queryClient}>
             <QueryClientProvider client={queryClient}>
@@ -98,6 +100,7 @@ export default function RootLayout() {
             </QueryClientProvider>
           </trpc.Provider>
         </ModulesProvider>
+        <AdminLoginCorner />
       </AuthProvider>
     </GestureHandlerRootView>
   );
