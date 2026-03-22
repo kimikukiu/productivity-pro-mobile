@@ -3,6 +3,7 @@ import { COOKIE_NAME } from "../shared/const.js";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { gptTrainingRouter } from "./_core/gpt-training-router";
+import { multiModelRouter } from "./_core/multi-model-router";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeLLM } from "./_core/llm-deepseek-free";
 import { chatRouter } from "./_core/chat-endpoint";
@@ -190,6 +191,7 @@ const AGENT_ROLES: Record<string, string> = {
 export const appRouter = router({
   system: systemRouter,
   gptTraining: gptTrainingRouter,
+  multiModel: multiModelRouter,
   auth: router({
     me: publicProcedure.query((opts) => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
