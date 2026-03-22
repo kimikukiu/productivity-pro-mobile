@@ -230,7 +230,7 @@ export const appRouter = router({
 
           // Add model context
           if (input) {
-            systemPrompt += `\n\n## ACTIVE MODEL: ${input.toUpperCase()}`;
+
           }
 
           const allMessages = [
