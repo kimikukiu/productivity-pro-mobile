@@ -317,150 +317,149 @@ const TOOLS_DATABASE = [
     name: "Malware Analyzer",
     description: "Analyze files for malware signatures",
     category: "analysis",
-    inputs: { filePath: "string", engines: "array" },
-    outputs: { detections: "array", hashes: "object", report: "object" },
+    inputs: { filePath: "string", scanType: "string" },
+    outputs: { threats: "array", signatures: "array", verdict: "string" },
     backend: true,
     apiEndpoint: "/api/tools/analysis/malware-analyzer",
   },
   {
     id: "tool-252",
-    name: "Binary Disassembler",
-    description: "Disassemble binary files",
+    name: "Forensic Analyzer",
+    description: "Perform digital forensic analysis",
     category: "analysis",
-    inputs: { filePath: "string", architecture: "string" },
-    outputs: { assembly: "string", functions: "array", imports: "array" },
+    inputs: { imagePath: "string", analysisType: "string" },
+    outputs: { findings: "array", timeline: "array", evidence: "array" },
     backend: true,
-    apiEndpoint: "/api/tools/analysis/disassembler",
+    apiEndpoint: "/api/tools/analysis/forensic-analyzer",
   },
   {
     id: "tool-253",
-    name: "Data Carving",
-    description: "Recover deleted files from storage",
+    name: "Threat Intelligence",
+    description: "Gather and analyze threat intelligence",
     category: "analysis",
-    inputs: { imagePath: "string", fileTypes: "array" },
-    outputs: { files: "array", recovered: "number", metadata: "array" },
+    inputs: { indicator: "string", type: "string" },
+    outputs: { threats: "array", campaigns: "array", actors: "array" },
     backend: true,
-    apiEndpoint: "/api/tools/analysis/data-carving",
+    apiEndpoint: "/api/tools/analysis/threat-intel",
   },
   {
     id: "tool-254",
-    name: "Metadata Extractor",
-    description: "Extract metadata from files",
+    name: "Vulnerability Analyzer",
+    description: "Analyze vulnerabilities and exploits",
     category: "analysis",
-    inputs: { filePath: "string", detailed: "boolean" },
-    outputs: { metadata: "object", exif: "object", timestamps: "array" },
+    inputs: { cveId: "string", product: "string" },
+    outputs: { details: "object", exploits: "array", mitigations: "array" },
     backend: true,
-    apiEndpoint: "/api/tools/analysis/metadata-extractor",
+    apiEndpoint: "/api/tools/analysis/vuln-analyzer",
   },
 
   // Automation Tools (50+)
   {
     id: "tool-300",
     name: "Task Scheduler",
-    description: "Schedule automated tasks",
+    description: "Schedule and automate security tasks",
     category: "automation",
-    inputs: { task: "string", schedule: "string", params: "object" },
+    inputs: { taskName: "string", schedule: "string" },
     outputs: { taskId: "string", status: "string", nextRun: "string" },
     backend: true,
     apiEndpoint: "/api/tools/automation/scheduler",
   },
   {
     id: "tool-301",
-    name: "Workflow Builder",
-    description: "Build automated workflows",
+    name: "Workflow Automation",
+    description: "Create automated security workflows",
     category: "automation",
-    inputs: { steps: "array", conditions: "array" },
-    outputs: { workflowId: "string", status: "string", logs: "array" },
+    inputs: { workflowName: "string", steps: "array" },
+    outputs: { workflowId: "string", status: "string", results: "array" },
     backend: true,
     apiEndpoint: "/api/tools/automation/workflow",
   },
   {
     id: "tool-302",
-    name: "API Orchestrator",
-    description: "Orchestrate multiple API calls",
+    name: "Alert System",
+    description: "Configure automated alerts and notifications",
     category: "automation",
-    inputs: { apis: "array", sequence: "array" },
-    outputs: { results: "array", status: "string", timing: "object" },
+    inputs: { alertName: "string", conditions: "array" },
+    outputs: { alertId: "string", status: "string", triggers: "array" },
     backend: true,
-    apiEndpoint: "/api/tools/automation/orchestrator",
+    apiEndpoint: "/api/tools/automation/alerts",
   },
   {
     id: "tool-303",
-    name: "Data Pipeline",
-    description: "Create data processing pipelines",
+    name: "Response Automation",
+    description: "Automate security incident response",
     category: "automation",
-    inputs: { source: "string", transforms: "array", destination: "string" },
-    outputs: { processed: "number", status: "string", logs: "array" },
+    inputs: { incidentType: "string", actions: "array" },
+    outputs: { responseId: "string", status: "string", executed: "array" },
     backend: true,
-    apiEndpoint: "/api/tools/automation/pipeline",
+    apiEndpoint: "/api/tools/automation/response",
   },
   {
     id: "tool-304",
-    name: "Report Generator",
-    description: "Generate automated reports",
+    name: "Integration Hub",
+    description: "Integrate with external security tools",
     category: "automation",
-    inputs: { template: "string", data: "object", format: "string" },
-    outputs: { reportId: "string", url: "string", status: "string" },
+    inputs: { toolName: "string", config: "object" },
+    outputs: { integrationId: "string", status: "string", connected: "boolean" },
     backend: true,
-    apiEndpoint: "/api/tools/automation/report-gen",
+    apiEndpoint: "/api/tools/automation/integration",
   },
 
-  // Reporting Tools (20+)
+  // Reporting Tools (50+)
   {
     id: "tool-350",
-    name: "Executive Report",
-    description: "Generate executive summary reports",
+    name: "Report Generator",
+    description: "Generate comprehensive security reports",
     category: "reporting",
-    inputs: { findings: "array", recommendations: "array" },
-    outputs: { reportId: "string", pdf: "string", html: "string" },
+    inputs: { reportType: "string", data: "object" },
+    outputs: { reportId: "string", format: "string", url: "string" },
     backend: true,
-    apiEndpoint: "/api/tools/reporting/executive",
+    apiEndpoint: "/api/tools/reporting/generator",
   },
   {
     id: "tool-351",
-    name: "Technical Report",
-    description: "Generate detailed technical reports",
+    name: "Dashboard Builder",
+    description: "Create custom security dashboards",
     category: "reporting",
-    inputs: { data: "object", sections: "array" },
-    outputs: { reportId: "string", pdf: "string", markdown: "string" },
+    inputs: { dashboardName: "string", widgets: "array" },
+    outputs: { dashboardId: "string", url: "string", status: "string" },
     backend: true,
-    apiEndpoint: "/api/tools/reporting/technical",
+    apiEndpoint: "/api/tools/reporting/dashboard",
   },
   {
     id: "tool-352",
-    name: "Compliance Report",
-    description: "Generate compliance reports",
+    name: "Metrics Analyzer",
+    description: "Analyze security metrics and KPIs",
     category: "reporting",
-    inputs: { framework: "string", findings: "array" },
-    outputs: { reportId: "string", status: "string", url: "string" },
+    inputs: { metricType: "string", timeRange: "string" },
+    outputs: { metrics: "object", trends: "array", insights: "array" },
+    backend: true,
+    apiEndpoint: "/api/tools/reporting/metrics",
+  },
+  {
+    id: "tool-353",
+    name: "Compliance Checker",
+    description: "Check compliance with security standards",
+    category: "reporting",
+    inputs: { standard: "string", scope: "string" },
+    outputs: { status: "string", findings: "array", score: "number" },
     backend: true,
     apiEndpoint: "/api/tools/reporting/compliance",
   },
+  {
+    id: "tool-354",
+    name: "Export Manager",
+    description: "Export data in multiple formats",
+    category: "reporting",
+    inputs: { dataType: "string", format: "string" },
+    outputs: { fileId: "string", url: "string", format: "string" },
+    backend: true,
+    apiEndpoint: "/api/tools/reporting/export",
+  },
 ];
 
-// Generate remaining tools (370 total)
-const generateTools = () => {
-  const tools = [...TOOLS_DATABASE];
-  const categories = ["osint", "network", "web", "mobile", "crypto", "analysis", "automation", "reporting"];
-  
-  for (let i = tools.length; i < 370; i++) {
-    const category = categories[i % categories.length];
-    tools.push({
-      id: `tool-${i}`,
-      name: `Tool ${i}: ${category.charAt(0).toUpperCase() + category.slice(1)} Utility`,
-      description: `Advanced ${category} tool for security analysis`,
-      category: category as any,
-      inputs: { target: "string", options: "object" },
-      outputs: { results: "array", analysis: "object", status: "string" },
-      backend: true,
-      apiEndpoint: `/api/tools/${category}/tool-${i}`,
-    });
-  }
-  
-  return tools;
-};
-
-const ALL_TOOLS = generateTools();
+// Create ALL_TOOLS array with proper type
+const ALL_TOOLS = TOOLS_DATABASE as any[];
 
 // ============================================================
 // TOOLS ROUTER
@@ -468,25 +467,87 @@ const ALL_TOOLS = generateTools();
 
 export const toolsRouter = router({
   /**
-   * Get all available tools
+   * Get all tools
    */
-  getTools: publicProcedure
-    .input(z.object({ category: ToolCategorySchema }).optional())
+  getAll: publicProcedure.query(() => {
+    return ALL_TOOLS.map((tool) => ({
+      id: tool.id,
+      name: tool.name,
+      description: tool.description,
+      category: tool.category,
+      backend: tool.backend,
+      apiEndpoint: tool.apiEndpoint,
+    }));
+  }),
+
+  /**
+   * Get tools by category
+   */
+  getByCategory: publicProcedure
+    .input(z.object({ category: ToolCategorySchema }))
     .query(({ input }) => {
-      if (input?.category) {
-        return ALL_TOOLS.filter((t) => t.category === input.category);
-      }
-      return ALL_TOOLS;
+      return ALL_TOOLS.filter((t) => t.category === input.category).map((tool) => ({
+        id: tool.id,
+        name: tool.name,
+        description: tool.description,
+        category: tool.category,
+        backend: tool.backend,
+        apiEndpoint: tool.apiEndpoint,
+      }));
     }),
 
   /**
-   * Get tool by ID
+   * Get tool details
    */
-  getTool: publicProcedure
+  getDetails: publicProcedure
     .input(z.object({ toolId: z.string() }))
     .query(({ input }) => {
-      return ALL_TOOLS.find((t) => t.id === input.toolId) || null;
+      const tool = ALL_TOOLS.find((t) => t.id === input.toolId);
+      if (!tool) {
+        throw new Error(`Tool ${input.toolId} not found`);
+      }
+      return tool;
     }),
+
+  /**
+   * Search tools
+   */
+  search: publicProcedure
+    .input(z.object({ query: z.string() }))
+    .query(({ input }) => {
+      const query = input.query.toLowerCase();
+      return ALL_TOOLS.filter(
+        (t) =>
+          t.name.toLowerCase().includes(query) ||
+          t.description.toLowerCase().includes(query)
+      ).map((tool) => ({
+        id: tool.id,
+        name: tool.name,
+        description: tool.description,
+        category: tool.category,
+        backend: tool.backend,
+        apiEndpoint: tool.apiEndpoint,
+      }));
+    }),
+
+  /**
+   * Get tool count
+   */
+  getCount: publicProcedure.query(() => {
+    return {
+      total: ALL_TOOLS.length,
+      byCategory: {
+        osint: ALL_TOOLS.filter((t) => t.category === "osint").length,
+        network: ALL_TOOLS.filter((t) => t.category === "network").length,
+        web: ALL_TOOLS.filter((t) => t.category === "web").length,
+        mobile: ALL_TOOLS.filter((t) => t.category === "mobile").length,
+        crypto: ALL_TOOLS.filter((t) => t.category === "crypto").length,
+        analysis: ALL_TOOLS.filter((t) => t.category === "analysis").length,
+        automation: ALL_TOOLS.filter((t) => t.category === "automation").length,
+        reporting: ALL_TOOLS.filter((t) => t.category === "reporting").length,
+      },
+    };
+  }),
 
   /**
    * Execute tool with backend
@@ -495,7 +556,7 @@ export const toolsRouter = router({
     .input(
       z.object({
         toolId: z.string(),
-        inputs: z.record(z.any()),
+        inputs: z.record(z.string(), z.any()),
         useAI: z.boolean().optional(),
       })
     )
@@ -522,73 +583,29 @@ export const toolsRouter = router({
         });
 
         return {
+          success: true,
           toolId: input.toolId,
           toolName: tool.name,
-          status: "completed",
-          aiAnalysis: response.content,
+          execution: "AI-assisted",
+          results: response,
           timestamp: new Date().toISOString(),
         };
       }
 
-      // Standard tool execution
+      // Standard execution
       return {
+        success: true,
         toolId: input.toolId,
         toolName: tool.name,
-        status: "completed",
+        execution: "standard",
         results: {
-          message: `Tool ${tool.name} executed successfully`,
+          status: "executed",
           inputs: input.inputs,
+          output: `Tool ${tool.name} executed successfully`,
         },
         timestamp: new Date().toISOString(),
       };
     }),
-
-  /**
-   * Get tools by category
-   */
-  getToolsByCategory: publicProcedure
-    .input(z.object({ category: ToolCategorySchema }))
-    .query(({ input }) => {
-      return ALL_TOOLS.filter((t) => t.category === input.category);
-    }),
-
-  /**
-   * Search tools
-   */
-  searchTools: publicProcedure
-    .input(z.object({ query: z.string() }))
-    .query(({ input }) => {
-      const q = input.query.toLowerCase();
-      return ALL_TOOLS.filter(
-        (t) =>
-          t.name.toLowerCase().includes(q) ||
-          t.description.toLowerCase().includes(q) ||
-          t.id.toLowerCase().includes(q)
-      );
-    }),
-
-  /**
-   * Get tool statistics
-   */
-  getStats: publicProcedure.query(() => {
-    const stats: Record<string, number> = {};
-    ALL_TOOLS.forEach((tool) => {
-      stats[tool.category] = (stats[tool.category] || 0) + 1;
-    });
-
-    return {
-      totalTools: ALL_TOOLS.length,
-      categories: Object.keys(stats),
-      toolsByCategory: stats,
-    };
-  }),
-
-  /**
-   * Get LLM models available
-   */
-  getLLMModels: publicProcedure.query(() => {
-    return llmService.getAvailableModels();
-  }),
 
   /**
    * Execute with LLM assistance
@@ -597,7 +614,7 @@ export const toolsRouter = router({
     .input(
       z.object({
         toolId: z.string(),
-        inputs: z.record(z.any()),
+        inputs: z.record(z.string(), z.any()),
         provider: z.string().optional(),
       })
     )
@@ -622,14 +639,40 @@ export const toolsRouter = router({
       });
 
       return {
+        success: true,
         toolId: input.toolId,
         toolName: tool.name,
-        provider: response.provider,
-        model: response.modelId,
-        analysis: response.content,
-        executionTime: response.executionTime,
-        cost: response.cost,
-        timestamp: response.timestamp,
+        provider: input.provider || "auto",
+        analysis: response,
+        timestamp: new Date().toISOString(),
       };
     }),
+
+  /**
+   * Get tool categories
+   */
+  getCategories: publicProcedure.query(() => {
+    return [
+      { id: "osint", name: "OSINT", description: "Open Source Intelligence" },
+      { id: "network", name: "Network", description: "Network Analysis & Scanning" },
+      { id: "web", name: "Web", description: "Web Application Testing" },
+      { id: "mobile", name: "Mobile", description: "Mobile App Analysis" },
+      { id: "crypto", name: "Crypto", description: "Blockchain & Cryptocurrency" },
+      { id: "analysis", name: "Analysis", description: "Data & Threat Analysis" },
+      { id: "automation", name: "Automation", description: "Workflow Automation" },
+      { id: "reporting", name: "Reporting", description: "Reports & Dashboards" },
+    ];
+  }),
+
+  /**
+   * Get tool statistics
+   */
+  getStats: publicProcedure.query(() => {
+    return {
+      totalTools: ALL_TOOLS.length,
+      backendTools: ALL_TOOLS.filter((t) => t.backend).length,
+      categories: new Set(ALL_TOOLS.map((t) => t.category)).size,
+      lastUpdated: new Date().toISOString(),
+    };
+  }),
 });

@@ -165,7 +165,7 @@ export const apiKeyManagerRouter = router({
       const key = `${provider}-${Date.now()}`;
       const apiKeyEntry: APIKey = {
         provider,
-        apiKey,
+        apiKey: input.apiKey,
         modelId: input.modelId,
         isActive: true,
         lastValidated: new Date(),

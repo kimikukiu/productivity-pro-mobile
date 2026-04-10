@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { router, publicProcedure } from "./trpc";
 import { MultiLLMService } from "./multi-llm-integration";
-import { getActiveKeys } from "./api-key-manager";
+import { apiKeyStore } from "./api-keys-storage";
 
 /**
  * MANUS ENGINE - 1:1 Autonomous AI Behavior Replication
@@ -18,7 +18,7 @@ const llmService = new MultiLLMService();
 
 export const ManusEngineSchema = z.object({
   task: z.string(),
-  context: z.record(z.any()).optional(),
+  context: z.record(z.string(), z.any()).optional(),
   tools: z.array(z.string()).optional(),
   autonomous: z.boolean().default(true),
   deepReasoning: z.boolean().default(true),
