@@ -77,7 +77,7 @@ export default function RepoControlScreen() {
   const [repos, setRepos] = useState<Repository[]>(REPOSITORIES);
   const [selectedRepo, setSelectedRepo] = useState<Repository | null>(REPOSITORIES[0]);
   const [filterPriority, setFilterPriority] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery] = useState(""); // Read-only for now
   const [syncingRepo, setSyncingRepo] = useState<string | null>(null);
 
   const haptic = useCallback((type: "light" | "success" | "error") => {

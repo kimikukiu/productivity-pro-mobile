@@ -6,12 +6,12 @@ import {
   Pressable,
   TextInput,
   Platform,
-  Alert,
   StyleSheet,
 } from "react-native";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { ScreenContainer } from "@/components/screen-container";
+import { useColors } from "@/hooks/use-colors";
 
 // Clipboard utility - works cross-platform
 const copyText = async (text: string) => {
@@ -19,8 +19,6 @@ const copyText = async (text: string) => {
     await navigator.clipboard.writeText(text);
   }
 };
-
-import { useColors } from "@/hooks/use-colors";
 import {
   ALL_PAYLOADS,
   ALL_JAILBREAKS,

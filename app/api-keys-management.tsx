@@ -155,6 +155,7 @@ export default function APIKeysManagementScreen() {
   useEffect(() => {
     loadAPIKeys();
     checkSystemStatus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**

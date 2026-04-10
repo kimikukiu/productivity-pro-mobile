@@ -99,7 +99,7 @@ export default function AdminPanel() {
   // Payment Management State
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [generatedTokens, setGeneratedTokens] = useState<UserSubscription[]>([]);
-  const [showTokenGenerator, setShowTokenGenerator] = useState(false);
+  // const [showTokenGenerator, setShowTokenGenerator] = useState(false); // Unused for now
   const [tokenCount, setTokenCount] = useState("1");
   const [loading, setLoading] = useState(false);
 

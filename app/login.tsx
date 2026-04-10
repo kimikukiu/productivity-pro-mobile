@@ -28,7 +28,7 @@ export default function LoginScreen() {
       } else {
         Alert.alert("Error", "Invalid admin password");
       }
-    } catch (error) {
+    } catch (_error) {
       Alert.alert("Error", "Login failed");
     } finally {
       setIsLoading(false);
@@ -46,7 +46,7 @@ export default function LoginScreen() {
       await setUserToken(password);
       setPassword("");
       router.replace("/(tabs)");
-    } catch (error) {
+    } catch (_error) {
       Alert.alert("Error", "Invalid token");
     } finally {
       setIsLoading(false);

@@ -11,7 +11,7 @@ export default function SettingsScreen() {
     heretic: true,
     ownpilot: true,
   });
-  const [features, setFeatures] = useState({
+  const [features] = useState({
     selfRepair: true,
     dynamicTools: true,
     promptDefense: true,
@@ -20,7 +20,7 @@ export default function SettingsScreen() {
     soulAgent: true,
     browserAgent: true,
     voicePipeline: false,
-  });
+  }); // Read-only for now
 
   const haptic = useCallback(() => {
     if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

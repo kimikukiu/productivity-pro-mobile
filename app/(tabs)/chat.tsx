@@ -1,11 +1,10 @@
 import {
   ScrollView, Text, View, TextInput, Pressable, ActivityIndicator,
-  StyleSheet, Platform, FlatList, Alert,
+  StyleSheet, Platform, Alert,
 } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { getApiBaseUrl } from "@/constants/oauth";
-import { useModules, MODULES } from "@/lib/modules-context";
 import * as Haptics from "expo-haptics";
 
 // ============================================================
@@ -76,7 +75,7 @@ export default function ChatScreen() {
   const [loading, setLoading] = useState(false);
   const [activeRole, setActiveRole] = useState<AgentRole | null>(null);
   const [activeModel, setActiveModel] = useState("manus-gpt");
-  const [showTools, setShowTools] = useState(false);
+  // const [showTools, setShowTools] = useState(false); // Unused for now
   const [activeTools, setActiveTools] = useState<Set<string>>(new Set(["cloud"]));
   const scrollRef = useRef<ScrollView>(null);
 
