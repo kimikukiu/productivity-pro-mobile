@@ -4,6 +4,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { gptTrainingRouter } from "./_core/gpt-training-router";
 import { multiModelRouter } from "./_core/multi-model-router";
+import { toolsRouter } from "./_core/tools-router";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeLLM } from "./_core/llm-deepseek-free";
 import { chatRouter } from "./_core/chat-endpoint";
@@ -192,6 +193,7 @@ export const appRouter = router({
   system: systemRouter,
   gptTraining: gptTrainingRouter,
   multiModel: multiModelRouter,
+  tools: toolsRouter,
   auth: router({
     me: publicProcedure.query((opts) => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
