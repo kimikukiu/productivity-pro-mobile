@@ -84,6 +84,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="gearshape.fill" color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="api-keys"
+        options={{
+          title: "API Keys",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="key.fill" color={color} />,
+        }}
+      />
     </Tabs>
   );
 }
