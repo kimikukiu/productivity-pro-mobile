@@ -5,6 +5,8 @@ import { systemRouter } from "./_core/systemRouter";
 import { gptTrainingRouter } from "./_core/gpt-training-router";
 import { multiModelRouter } from "./_core/multi-model-router";
 import { toolsRouter } from "./_core/tools-router";
+import { apiKeyManagerRouter } from "./_core/api-key-manager";
+import { manusEngineRouter } from "./_core/manus-engine";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeLLM } from "./_core/llm-deepseek-free";
 import { chatRouter } from "./_core/chat-endpoint";
@@ -194,6 +196,8 @@ export const appRouter = router({
   gptTraining: gptTrainingRouter,
   multiModel: multiModelRouter,
   tools: toolsRouter,
+  apiKeys: apiKeyManagerRouter,
+  manus: manusEngineRouter,
   auth: router({
     me: publicProcedure.query((opts) => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
