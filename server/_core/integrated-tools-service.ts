@@ -8,6 +8,7 @@ import { z } from "zod";
 import { publicProcedure, router } from "./trpc";
 import { invokeMultiModelGPT } from "./gpt-multi-model";
 import { ManusEngine } from "./manus-engine";
+import { tgptService } from "./tgpt-api-service";
 
 const manusEngine = new ManusEngine();
 
@@ -109,16 +110,20 @@ class IntegratedToolsManager {
   }
 
   async executeTGPT(input: Record<string, any>) {
-    // Execute TGPT queries through Quantum Intelligence Ultra
-    const response = await invokeMultiModelGPT([
-      { role: "user", content: `TGPT Query: ${input.query}` },
-    ]);
+    // Execute TGPT queries using TGPT API directly
+    const response = await tgptService.execute({
+      query: input.query,
+      model: input.model || "gpt-4",
+      temperature: input.temperature || 0.7,
+      maxTokens: input.maxTokens || 2000,
+    });
     return {
       tool: "tgpt",
       query: input.query,
       response: response.content,
       model: response.model,
-      powered_by: "Quantum Intelligence Ultra",
+      usage: response.usage,
+      powered_by: "TGPT API",
     };
   }
 
