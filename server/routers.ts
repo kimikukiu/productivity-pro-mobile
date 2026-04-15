@@ -8,6 +8,7 @@ import { toolsRouter } from "./_core/tools-router";
 import { apiKeyManagerRouter } from "./_core/api-key-manager";
 import { manusEngineRouter } from "./_core/manus-engine";
 import { apiKeysEndpointRouter } from "./_core/api-keys-endpoint";
+import { integratedToolsRouter } from "./_core/integrated-tools-service";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeLLM } from "./_core/llm-deepseek-free";
 import { chatRouter } from "./_core/chat-endpoint";
@@ -199,6 +200,7 @@ export const appRouter = router({
   tools: toolsRouter,
   apiKeys: apiKeysEndpointRouter,
   manus: manusEngineRouter,
+  integratedTools: integratedToolsRouter,
   auth: router({
     me: publicProcedure.query((opts) => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {

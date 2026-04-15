@@ -91,6 +91,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="key.fill" color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="integrated-tools"
+        options={{
+          title: "Tools",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="wrench.fill" color={color} />,
+        }}
+      />
     </Tabs>
   );
 }
