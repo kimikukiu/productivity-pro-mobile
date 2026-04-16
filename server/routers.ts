@@ -12,6 +12,7 @@ import { integratedToolsRouter } from "./_core/integrated-tools-service";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeLLM } from "./_core/llm-deepseek-free";
 import { chatRouter } from "./_core/chat-endpoint";
+import { multimodalRouter } from "./_core/multimodal-router";
 import { generateDynamicSystemPrompt, getTrainingMetrics } from "./_core/real-training-loader";
 
 // ============================================================
@@ -197,6 +198,7 @@ export const appRouter = router({
   system: systemRouter,
   gptTraining: gptTrainingRouter,
   multiModel: multiModelRouter,
+  multimodal: multimodalRouter,
   tools: toolsRouter,
   apiKeys: apiKeysEndpointRouter,
   manus: manusEngineRouter,

@@ -1,6 +1,6 @@
 /**
  * Multi-Model GPT Router
-   * Provides tRPC endpoints for z.ai and HuggingFace LLM integration
+   * Provides tRPC endpoints for z-ai-web-dev-sdk with GitHub integration
  */
 
 import { z } from "zod";
@@ -33,7 +33,7 @@ export const multiModelRouter = router({
         model: z.string().optional(),
         temperature: z.number().optional(),
         maxTokens: z.number().optional(),
-        priority: z.enum(["zai", "huggingface", "auto"]).optional(),
+        priority: z.enum(["zai", "auto"]).optional(),
       })
     )
     .mutation(async ({ input }) => {
@@ -186,7 +186,7 @@ export const multiModelRouter = router({
       z.object({
         userMessage: z.string(),
         systemPrompt: z.string().optional(),
-        priority: z.enum(["zai", "huggingface", "auto"]).optional(),
+        priority: z.enum(["zai", "auto"]).optional(),
         temperature: z.number().optional(),
         maxTokens: z.number().optional(),
       })
@@ -234,8 +234,8 @@ export const multiModelRouter = router({
         name: m,
         status: "available",
       })),
-      primaryModels: ["zai", "huggingface"],
-      fallbackModels: ["huggingface-alt", "zai-alt"],
+      primaryModels: ["z-ai-web-dev-sdk"],
+      fallbackModels: [],
       timestamp: new Date().toISOString(),
     };
   }),

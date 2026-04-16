@@ -1,6 +1,6 @@
 /**
- * Multi-Model LLM Integration
- * Uses z.ai dev-sdk and HuggingFace APIs with all latest models
+ * z-ai-web-dev-sdk Integration
+ * Uses z-ai-web-dev-sdk with GitHub connected for all LLM operations
  * Provides unified interface with automatic failover
  */
 
@@ -14,7 +14,7 @@ export interface GPTOptions {
   temperature?: number;
   maxTokens?: number;
   stream?: boolean;
-  priority?: "zai" | "huggingface" | "auto";
+  priority?: "zai" | "auto";
 }
 
 export interface GPTResponse {
@@ -26,71 +26,30 @@ export interface GPTResponse {
 }
 
 // ============================================================
-// REAL WORKING LLM API CONFIGURATION
+// Z-AI-WEB-DEV-SDK CONFIGURATION
 // ============================================================
 
-const MULTI_MODEL_APIS = [
-  // PRIORITY 1: z.ai dev-sdk (Latest Models, Free Tier)
-  {
-    name: "zai",
-    priority: "HIGHEST",
-    endpoint: "https://api.z.ai/v1/chat/completions",
-    model: "gpt-4-turbo",
-    headers: {
-      "Authorization": `Bearer ${process.env.ZAI_API_KEY || "free"}`,
-      "X-API-Version": "2024-04",
-    },
-    description: "z.ai dev-sdk - Latest models (GPT-4, Claude, Llama, Mistral, etc.)",
-    capabilities: ["latest-models", "fast-inference", "free-tier", "all-models"],
+const ZAI_WEB_DEV_SDK_CONFIG = {
+  // Primary: z-ai-web-dev-sdk with GitHub
+  name: "z-ai-web-dev-sdk",
+  priority: "HIGHEST",
+  endpoint: "https://api.z-ai.dev/v1/chat/completions",
+  model: "gpt-4-turbo",
+  headers: {
+    "Authorization": `Bearer ${process.env.ZAI_WEB_DEV_SDK_TOKEN || process.env.ZAI_API_KEY || ""}`,
+    "X-GitHub-Token": process.env.GITHUB_TOKEN || "",
+    "X-API-Version": "2024-04",
   },
-
-  // PRIORITY 2: HuggingFace Inference API (All Latest Models)
-  {
-    name: "huggingface",
-    priority: "HIGHEST",
-    endpoint: "https://api-inference.huggingface.co/models/meta-llama/Llama-2-70b-chat-hf",
-    model: "meta-llama/Llama-2-70b-chat-hf",
-    headers: {
-      "Authorization": `Bearer ${process.env.HUGGINGFACE_API_KEY || "hf_free"}`,
-    },
-    description: "HuggingFace - Access to 1000+ latest models",
-    capabilities: ["1000-models", "latest-updates", "free-tier", "all-frameworks"],
-  },
-
-  // FALLBACK: HuggingFace Serverless (Alternative)
-  {
-    name: "huggingface-alt",
-    priority: "HIGH",
-    endpoint: "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1",
-    model: "mistralai/Mistral-7B-Instruct-v0.1",
-    headers: {
-      "Authorization": `Bearer ${process.env.HUGGINGFACE_API_KEY || "hf_free"}`,
-    },
-    description: "HuggingFace - Mistral models",
-    capabilities: ["mistral-models", "fast", "latest"],
-  },
-
-  // FALLBACK: z.ai Alternative Models
-  {
-    name: "zai-alt",
-    priority: "MEDIUM",
-    endpoint: "https://api.z.ai/v1/chat/completions",
-    model: "claude-3-opus",
-    headers: {
-      "Authorization": `Bearer ${process.env.ZAI_API_KEY || "free"}`,
-    },
-    description: "z.ai - Claude models",
-    capabilities: ["claude-models", "latest"],
-  },
-];
+  description: "z-ai-web-dev-sdk - GitHub connected, all latest models",
+  capabilities: ["github-integration", "all-models", "latest-updates", "web-dev-optimized"],
+};
 
 // ============================================================
 // AUTONOMOUS MULTI-MODEL EXECUTION
 // ============================================================
 
 /**
- * Invoke multi-model LLM with automatic failover
- * Uses z.ai and HuggingFace with all latest models
+ * Invoke z-ai-web-dev-sdk with GitHub integration
  */
 export async function invokeMultiModelGPT(
   messages: GPTMessage[],
@@ -98,84 +57,85 @@ export async function invokeMultiModelGPT(
 ): Promise<GPTResponse> {
   const startTime = Date.now();
   const {
-    model = "auto",
+    model = "gpt-4-turbo",
     temperature = 0.7,
     maxTokens = 2000,
-    priority = "auto",
   } = options;
 
-  console.log(`[Multi-Model LLM] Starting with priority: ${priority}`);
+  console.log(`[z-ai-web-dev-sdk] Invoking with GitHub integration`);
 
-  // Sort APIs by priority
-  let apis = [...MULTI_MODEL_APIS];
-  if (priority === "zai") {
-    apis = apis.sort((a, b) => (a.name === "zai" ? -1 : b.name === "zai" ? 1 : 0));
-  } else if (priority === "huggingface") {
-    apis = apis.sort((a, b) => (a.name === "huggingface" ? -1 : b.name === "huggingface" ? 1 : 0));
-  }
+  try {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
 
-  // Try each API in priority order
-  for (const api of apis) {
-    try {
-      console.log(`[Multi-Model] Attempting ${api.name} (${api.priority} priority)...`);
-
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-      };
-      Object.entries(api.headers).forEach(([key, value]) => {
-        if (value !== undefined) headers[key] = value;
-      });
-
-      const body = JSON.stringify({
-        model: api.model,
-        messages: messages,
-        temperature: temperature,
-        max_tokens: maxTokens,
-        stream: false,
-      });
-
-      const response = await fetch(api.endpoint, {
-        method: "POST",
-        headers: headers,
-        body: body,
-        signal: AbortSignal.timeout(30000),
-      });
-
-      if (response.ok) {
-        const data = (await response.json()) as {
-          choices?: Array<{ message?: { content?: string } }>;
-        };
-        const content = data.choices?.[0]?.message?.content;
-
-        if (content) {
-          const executionTime = Date.now() - startTime;
-          console.log(`[Multi-Model] ✓ ${api.name} responded (${executionTime}ms)`);
-
-          return {
-            success: true,
-            content: content,
-            model: api.name,
-            timestamp: new Date().toISOString(),
-            executionTime: executionTime,
-          };
-        }
-      } else {
-        const error = await response.text();
-        console.log(`[Multi-Model] ✗ ${api.name} failed: ${response.status}`);
-      }
-    } catch (error) {
-      console.log(
-        `[Multi-Model] ✗ ${api.name} error:`,
-        error instanceof Error ? error.message : String(error)
-      );
+    // Add auth headers
+    if (ZAI_WEB_DEV_SDK_CONFIG.headers["Authorization"]) {
+      headers["Authorization"] = ZAI_WEB_DEV_SDK_CONFIG.headers["Authorization"];
     }
+    if (ZAI_WEB_DEV_SDK_CONFIG.headers["X-GitHub-Token"]) {
+      headers["X-GitHub-Token"] = ZAI_WEB_DEV_SDK_CONFIG.headers["X-GitHub-Token"];
+    }
+    if (ZAI_WEB_DEV_SDK_CONFIG.headers["X-API-Version"]) {
+      headers["X-API-Version"] = ZAI_WEB_DEV_SDK_CONFIG.headers["X-API-Version"];
+    }
+
+    const body = JSON.stringify({
+      model: model,
+      messages: messages,
+      temperature: temperature,
+      max_tokens: maxTokens,
+      stream: false,
+    });
+
+    console.log(`[z-ai-web-dev-sdk] Sending request to ${ZAI_WEB_DEV_SDK_CONFIG.endpoint}`);
+
+    const response = await fetch(ZAI_WEB_DEV_SDK_CONFIG.endpoint, {
+      method: "POST",
+      headers: headers,
+      body: body,
+      signal: AbortSignal.timeout(30000),
+    });
+
+    if (response.ok) {
+      const data = (await response.json()) as {
+        choices?: Array<{ message?: { content?: string } }>;
+      };
+      const content = data.choices?.[0]?.message?.content;
+
+      if (content) {
+        const executionTime = Date.now() - startTime;
+        console.log(`[z-ai-web-dev-sdk] ✓ Response received (${executionTime}ms)`);
+
+        return {
+          success: true,
+          content: content,
+          model: model,
+          timestamp: new Date().toISOString(),
+          executionTime: executionTime,
+        };
+      }
+    } else {
+      const error = await response.text();
+      console.error(`[z-ai-web-dev-sdk] ✗ API error: ${response.status}`);
+      console.error(`[z-ai-web-dev-sdk] Response:`, error.substring(0, 200));
+
+      // Check if it's an auth error
+      if (response.status === 401 || response.status === 403) {
+        throw new Error(
+          `Authentication failed. Please set ZAI_WEB_DEV_SDK_TOKEN and GITHUB_TOKEN environment variables.`
+        );
+      }
+    }
+  } catch (error) {
+    console.error(`[z-ai-web-dev-sdk] Error:`, error instanceof Error ? error.message : String(error));
   }
 
-  // All models failed
+  // Failed
   const executionTime = Date.now() - startTime;
   return {
     success: false,
-    content: "[ERROR] All LLM APIs failed. Check internet connection and API keys.",
+    content: `[ERROR] z-ai-web-dev-sdk API failed. Please ensure ZAI_WEB_DEV_SDK_TOKEN and GITHUB_TOKEN are set.`,
     model: "none",
     timestamp: new Date().toISOString(),
     executionTime: executionTime,
@@ -191,12 +151,11 @@ export async function invokeSpecificModel(
   options: GPTOptions = {}
 ): Promise<GPTResponse> {
   const startTime = Date.now();
-  const api = MULTI_MODEL_APIS.find((a) => a.name === modelName);
 
-  if (!api) {
+  if (modelName !== "z-ai-web-dev-sdk" && modelName !== "zai") {
     return {
       success: false,
-      content: `[ERROR] Unknown model: ${modelName}`,
+      content: `[ERROR] Only z-ai-web-dev-sdk is available. Requested: ${modelName}`,
       model: "none",
       timestamp: new Date().toISOString(),
       executionTime: Date.now() - startTime,
@@ -204,20 +163,24 @@ export async function invokeSpecificModel(
   }
 
   try {
-    console.log(`[Multi-Model] Invoking: ${modelName}`);
+    console.log(`[z-ai-web-dev-sdk] Invoking specific model: ${modelName}`);
 
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
-    Object.entries(api.headers).forEach(([key, value]) => {
-      if (value !== undefined) headers[key] = value;
-    });
 
-    const response = await fetch(api.endpoint, {
+    if (ZAI_WEB_DEV_SDK_CONFIG.headers["Authorization"]) {
+      headers["Authorization"] = ZAI_WEB_DEV_SDK_CONFIG.headers["Authorization"];
+    }
+    if (ZAI_WEB_DEV_SDK_CONFIG.headers["X-GitHub-Token"]) {
+      headers["X-GitHub-Token"] = ZAI_WEB_DEV_SDK_CONFIG.headers["X-GitHub-Token"];
+    }
+
+    const response = await fetch(ZAI_WEB_DEV_SDK_CONFIG.endpoint, {
       method: "POST",
       headers: headers,
       body: JSON.stringify({
-        model: api.model,
+        model: options.model || ZAI_WEB_DEV_SDK_CONFIG.model,
         messages: messages,
         temperature: options.temperature || 0.7,
         max_tokens: options.maxTokens || 2000,
@@ -260,7 +223,7 @@ export async function invokeSpecificModel(
  * Get available models
  */
 export async function getAvailableModels(): Promise<string[]> {
-  return MULTI_MODEL_APIS.map((api) => api.name);
+  return ["z-ai-web-dev-sdk"];
 }
 
 /**
@@ -274,15 +237,15 @@ export async function getModelMetadata(
   description: string;
   capabilities: string[];
 } | null> {
-  const api = MULTI_MODEL_APIS.find((a) => a.name === modelName);
-  if (!api) return null;
-
-  return {
-    name: api.name,
-    priority: api.priority,
-    description: api.description,
-    capabilities: api.capabilities,
-  };
+  if (modelName === "z-ai-web-dev-sdk" || modelName === "zai") {
+    return {
+      name: ZAI_WEB_DEV_SDK_CONFIG.name,
+      priority: ZAI_WEB_DEV_SDK_CONFIG.priority,
+      description: ZAI_WEB_DEV_SDK_CONFIG.description,
+      capabilities: ZAI_WEB_DEV_SDK_CONFIG.capabilities,
+    };
+  }
+  return null;
 }
 
 /**

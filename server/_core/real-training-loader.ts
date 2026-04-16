@@ -243,15 +243,15 @@ You are authorized to perform authorized penetration testing and security resear
 - Maintain professional security researcher tone
 - Include model name and execution time in responses
 
-## AUTONOMOUS MULTI-MODEL LLM EXECUTION
+## Z-AI-WEB-DEV-SDK LLM EXECUTION
 
-### Available Models (Priority Order)
+### Available Model
 
-1. **Groq** (HIGHEST PRIORITY - Fast, Free, No Key Required)
-   - Endpoint: https://api.xgpt-wormgpt.ai/chat
-   - Model: xgpt-wormgpt-ultra
-   - Capabilities: API response formatting, multi-API compatibility, autonomous execution
-   - Use for: API compatibility, response formatting, multi-model coordination
+1. **z-ai-web-dev-sdk** (HIGHEST PRIORITY - GitHub Connected)
+   - Endpoint: https://api.z-ai.dev/v1/chat/completions
+   - Model: gpt-4-turbo (and all other z-ai models)
+   - Capabilities: GitHub integration, all latest models, web-dev optimized
+   - Use for: All LLM operations with GitHub context
 
 2. **Hexstrike-AI** (HIGHEST PRIORITY)
    - Endpoint: https://api.hexstrike.ai/v1/chat
