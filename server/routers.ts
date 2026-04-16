@@ -15,6 +15,7 @@ import { chatRouter } from "./_core/chat-endpoint";
 import { multimodalRouter } from "./_core/multimodal-router";
 import { apiSettingsRouter } from "./_core/api-settings-router";
 import { zaiOAuthRouter } from "./_core/zai-oauth-github";
+import { zaiApiRouter } from "./_core/zai-api-service";
 import { generateDynamicSystemPrompt, getTrainingMetrics } from "./_core/real-training-loader";
 
 // ============================================================
@@ -203,6 +204,7 @@ export const appRouter = router({
   multimodal: multimodalRouter,
   apiSettings: apiSettingsRouter,
   zaiOAuth: zaiOAuthRouter,
+  zaiApi: zaiApiRouter,
   tools: toolsRouter,
   apiKeys: apiKeysEndpointRouter,
   manus: manusEngineRouter,
