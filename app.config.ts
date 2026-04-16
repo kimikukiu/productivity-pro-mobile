@@ -44,6 +44,12 @@ const config: ExpoConfig = {
       projectId: "cc22e9c1-8a2e-47c9-9dfe-251c2b90fcf0",
     },
   },
+  updates: {
+    url: "https://u.expo.dev/cc22e9c1-8a2e-47c9-9dfe-251c2b90fcf0",
+  },
+  runtimeVersion: {
+    policy: "appVersion",
+  },
   name: env.appName,
   slug: env.appSlug,
   version: "1.0.0",

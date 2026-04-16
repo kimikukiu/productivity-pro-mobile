@@ -1,6 +1,6 @@
 /**
  * Multi-Model GPT Router
- * Provides tRPC endpoints for XGPT-WormGPT, Hexstrike-AI, WormGPT integration
+   * Provides tRPC endpoints for z.ai and HuggingFace LLM integration
  */
 
 import { z } from "zod";
@@ -33,7 +33,7 @@ export const multiModelRouter = router({
         model: z.string().optional(),
         temperature: z.number().optional(),
         maxTokens: z.number().optional(),
-        priority: z.enum(["xgpt", "hexstrike", "wormgpt", "auto"]).optional(),
+        priority: z.enum(["zai", "huggingface", "auto"]).optional(),
       })
     )
     .mutation(async ({ input }) => {
@@ -121,9 +121,9 @@ export const multiModelRouter = router({
   /**
    * Get list of available models with metadata
    */
-  getModels: publicProcedure.query(() => {
+  getModels: publicProcedure.query(async () => {
     try {
-      const models = getAvailableModels();
+      const models = await getAvailableModels();
       return {
         success: true,
         models: models,
@@ -147,9 +147,9 @@ export const multiModelRouter = router({
    */
   getModelInfo: publicProcedure
     .input(z.object({ modelName: z.string() }))
-    .query(({ input }) => {
+    .query(async ({ input }) => {
       try {
-        const metadata = getModelMetadata(input.modelName);
+        const metadata = await getModelMetadata(input.modelName);
         if (!metadata) {
           return {
             success: false,
@@ -162,8 +162,6 @@ export const multiModelRouter = router({
           success: true,
           model: {
             name: metadata.name,
-            endpoint: metadata.endpoint,
-            model: metadata.model,
             priority: metadata.priority,
             description: metadata.description,
             capabilities: metadata.capabilities,
@@ -188,7 +186,7 @@ export const multiModelRouter = router({
       z.object({
         userMessage: z.string(),
         systemPrompt: z.string().optional(),
-        priority: z.enum(["xgpt", "hexstrike", "wormgpt", "auto"]).optional(),
+        priority: z.enum(["zai", "huggingface", "auto"]).optional(),
         temperature: z.number().optional(),
         maxTokens: z.number().optional(),
       })
@@ -202,12 +200,7 @@ export const multiModelRouter = router({
 
         const response = await autonomousMultiModelExecution(
           input.userMessage,
-          systemPrompt,
-          {
-            priority: input.priority,
-            temperature: input.temperature,
-            maxTokens: input.maxTokens,
-          }
+          systemPrompt
         );
 
         return {
@@ -232,18 +225,17 @@ export const multiModelRouter = router({
   /**
    * Health check for all models
    */
-  health: publicProcedure.query(() => {
-    const models = getAvailableModels();
+  health: publicProcedure.query(async () => {
+    const models = await getAvailableModels();
     return {
       status: "healthy",
       availableModels: models.length,
       models: models.map((m) => ({
-        name: m.name,
-        priority: m.priority,
+        name: m,
         status: "available",
       })),
-      primaryModels: ["xgpt-wormgpt", "hexstrike-ai", "wormgpt"],
-      fallbackModels: ["groq", "deepseek", "together-ai"],
+      primaryModels: ["zai", "huggingface"],
+      fallbackModels: ["huggingface-alt", "zai-alt"],
       timestamp: new Date().toISOString(),
     };
   }),
