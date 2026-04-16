@@ -146,6 +146,21 @@ export default function SettingsScreen() {
           ))}
         </View>
 
+        {/* API Settings */}
+        <View style={st.card}>
+          <Text style={st.cardTitle}>◆ API CONFIGURATION</Text>
+          <Pressable
+            onPress={() => {
+              haptic();
+              // Navigate to API settings
+              Alert.alert("🔑 API Settings", "Configure z-ai-web-dev-sdk and HuggingFace API keys for advanced LLM models");
+            }}
+            style={({ pressed }) => [st.adminPanelBtn, pressed && { opacity: 0.8 }]}
+          >
+            <Text style={st.adminPanelBtnText}>🔑 API SETTINGS</Text>
+          </Pressable>
+        </View>
+
         {/* Admin & Billing */}
         <View style={st.card}>
           <Text style={st.cardTitle}>◆ ADMIN & BILLING</Text>
