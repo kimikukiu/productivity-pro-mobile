@@ -92,6 +92,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="api-settings"
+        options={{
+          title: "LLM Config",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="gearshape.2.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="integrated-tools"
         options={{
           title: "Tools",

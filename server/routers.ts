@@ -14,6 +14,7 @@ import { invokeLLM } from "./_core/llm-deepseek-free";
 import { chatRouter } from "./_core/chat-endpoint";
 import { multimodalRouter } from "./_core/multimodal-router";
 import { apiSettingsRouter } from "./_core/api-settings-router";
+import { zaiOAuthRouter } from "./_core/zai-oauth-github";
 import { generateDynamicSystemPrompt, getTrainingMetrics } from "./_core/real-training-loader";
 
 // ============================================================
@@ -201,6 +202,7 @@ export const appRouter = router({
   multiModel: multiModelRouter,
   multimodal: multimodalRouter,
   apiSettings: apiSettingsRouter,
+  zaiOAuth: zaiOAuthRouter,
   tools: toolsRouter,
   apiKeys: apiKeysEndpointRouter,
   manus: manusEngineRouter,
