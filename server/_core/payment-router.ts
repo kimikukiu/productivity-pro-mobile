@@ -27,7 +27,7 @@ export const paymentRouter = router({
     .input(
       z.object({
         email: z.string().email(),
-        planId: z.enum(["weekly", "monthly", "yearly"]),
+        planId: z.enum(["trial", "weekly", "monthly", "yearly"]),
       })
     )
     .mutation(({ input }) => {
@@ -63,7 +63,7 @@ export const paymentRouter = router({
     .input(
       z.object({
         token: z.string(),
-        planId: z.enum(["weekly", "monthly", "yearly"]),
+        planId: z.enum(["trial", "weekly", "monthly", "yearly"]),
       })
     )
     .mutation(({ input }) => {

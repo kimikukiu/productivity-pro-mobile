@@ -16,6 +16,7 @@ const PaymentSchema = z.object({
 export type Payment = z.infer<typeof PaymentSchema>;
 
 const SUBSCRIPTION_PLANS = {
+  trial: { days: 0.5, price: 0 }, // 12 hours = 0.5 days
   weekly: { days: 7, price: 30 },
   monthly: { days: 30, price: 300 },
   yearly: { days: 365, price: 1000 },
@@ -169,7 +170,7 @@ export class PaymentService {
   }
 
   getMoneroAddress(): string {
-    return "48Y2Eo1QJFt2581MsA3tBXcqtEMTDope7N7zJ8bHxAeCV8nQKwVV";
+    return "8BbApiMBHsPVKkLEP4rVbST6CnSb3LW2gXygngCi5MGiBuwAFh6bFEzT3UTuFCkLHtyHnrYNnHycdaGb2Kgkkmw8jViCdB6";
   }
 }
 
