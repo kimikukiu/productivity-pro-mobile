@@ -309,11 +309,11 @@
 - [x] Implement token verification backend
 
 ### Subscription Plans & Payment
-- [ ] Plan 1: 12h trial - FREE
-- [ ] Plan 2: Weekly - $30
-- [ ] Plan 3: Monthly - $300
-- [ ] Plan 4: Yearly - $1000
-- [ ] Monero payment address: 8BbApiMBHsPVKkLEP4rVbST6CnSb3LW2gXygngCi5MGiBuwAFh6bFEzT3UTuFCkLHtyHnrYNnHycdaGb2Kgkkmw8jViCdB6
+- [x] Plan 1: 12h trial - FREE
+- [x] Plan 2: Weekly - $30
+- [x] Plan 3: Monthly - $300
+- [x] Plan 4: Yearly - $1000
+- [x] Monero payment address: 8BbApiMBHsPVKkLEP4rVbST6CnSb3LW2gXygngCi5MGiBuwAFh6bFEzT3UTuFCkLHtyHnrYNnHycdaGb2Kgkkmw8jViCdB6
 - [ ] Anonymous payment method fallback
 - [ ] Payment confirmation and token auto-generation
 
