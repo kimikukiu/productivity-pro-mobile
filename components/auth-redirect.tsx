@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRouter, useSegments } from "expo-router";
-import { useAuth } from "@@/lib/auth-context";
+import { useAuth } from "@/lib/auth-context";
 
 /**
  * Component that redirects to login if user is not authenticated.
