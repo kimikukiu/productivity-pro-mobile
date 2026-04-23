@@ -6,6 +6,7 @@ import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
+import apiV1Router from "../api-v1";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise((resolve) => {
@@ -68,6 +69,9 @@ async function startServer() {
     }),
   );
 
+  // Mount REST API v1 routes
+  app.use("/api/v1", apiV1Router);
+
   const preferredPort = parseInt(process.env.PORT || "3000");
   const port = await findAvailablePort(preferredPort);
 
@@ -81,3 +85,19 @@ async function startServer() {
 }
 
 startServer().catch(console.error);
+
+// Error recovery: Auto-restart on uncaught exceptions
+process.on("uncaughtException", (error) => {
+  console.error("[Server] Unaught Exception:", error);
+  console.log("[Server] Attempting to recover in 5 seconds...");
+  setTimeout(() => {
+    console.log("[Server] Attempting restart...");
+    startServer().catch((err) => {
+      console.error("[Server] Restart failed:", err);
+    });
+  }, 5000);
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("[Server] Unhandled Rejection at:", promise, "reason:", reason);
+});

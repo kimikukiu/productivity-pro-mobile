@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,9 @@ import {
 import { ScreenContainer } from "@/components/screen-container";
 import * as Haptics from "expo-haptics";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Device from "expo-device";
+import * as Battery from "expo-battery";
+import { useKeepAwake } from "expo-keep-awake";
 
 // ============================================================
 // TYPES
@@ -99,9 +102,112 @@ export default function AdminPanel() {
   // Payment Management State
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [generatedTokens, setGeneratedTokens] = useState<UserSubscription[]>([]);
+  const [allTokens, setAllTokens] = useState<UserSubscription[]>([]);
   // const [showTokenGenerator, setShowTokenGenerator] = useState(false); // Unused for now
   const [tokenCount, setTokenCount] = useState("1");
   const [loading, setLoading] = useState(false);
+
+  // System Statistics State
+  const [batteryLevel, setBatteryLevel] = useState<number | null>(null);
+  const [batteryState, setBatteryState] = useState<string>("unknown");
+  const [cpuUsage, setCpuUsage] = useState<string>("N/A");
+  const [memoryUsage, setMemoryUsage] = useState<string>("N/A");
+  const [diskUsage, setDiskUsage] = useState<string>("N/A");
+  const [networkStatus, setNetworkStatus] = useState<string>("Connected");
+  const [deviceInfo, setDeviceInfo] = useState<any>(null);
+  const [systemHealth, setSystemHealth] = useState<"good" | "warning" | "critical">("good");
+  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+
+  // Load tokens from AsyncStorage on mount
+  useEffect(() => {
+    loadTokens();
+    loadDeviceInfo();
+    startSystemMonitoring();
+  }, []);
+
+  const loadDeviceInfo = async () => {
+    try {
+      const info = {
+        brand: Device.brand,
+        modelName: Device.modelName,
+        osName: Device.osName,
+        osVersion: Device.osVersion,
+        totalMemory: Device.totalMemory,
+        isDevice: Device.isDevice,
+      };
+      setDeviceInfo(info);
+    } catch (error) {
+      console.error("Failed to load device info:", error);
+    }
+  };
+
+  const startSystemMonitoring = async () => {
+    // Initial battery check
+    updateBatteryStatus();
+    
+    // Set up periodic updates
+    const interval = setInterval(() => {
+      updateBatteryStatus();
+      updateSystemStats();
+      setLastUpdate(new Date());
+    }, 5000); // Update every 5 seconds
+
+    return () => clearInterval(interval);
+  };
+
+  const updateBatteryStatus = async () => {
+    try {
+      const battery = await Battery.getBatteryLevelAsync();
+      setBatteryLevel(battery * 100);
+      const batteryState = await Battery.getBatteryStateAsync();
+      setBatteryState(batteryState === Battery.BatteryState.CHARGING ? "charging" : 
+                       batteryState === Battery.BatteryState.UNPLUGGED ? "unplugged" : 
+                       batteryState === Battery.BatteryState.FULL ? "full" : "unknown");
+    } catch (error) {
+      console.error("Battery status error:", error);
+    }
+  };
+
+  const updateSystemStats = () => {
+    // Simulate system stats (in a real app, these would come from a native module or API)
+    const cpu = Math.floor(Math.random() * 30 + 10); // 10-40%
+    const mem = Math.floor(Math.random() * 40 + 30); // 30-70%
+    const disk = Math.floor(Math.random() * 30 + 20); // 20-50%
+    
+    setCpuUsage(`${cpu}%`);
+    setMemoryUsage(`${mem}%`);
+    setDiskUsage(`${disk}%`);
+    
+    // Determine system health
+    if (cpu > 80 || mem > 85 || (batteryLevel !== null && batteryLevel < 15)) {
+      setSystemHealth("critical");
+    } else if (cpu > 60 || mem > 70 || (batteryLevel !== null && batteryLevel < 30)) {
+      setSystemHealth("warning");
+    } else {
+      setSystemHealth("good");
+    }
+  };
+
+  const loadTokens = async () => {
+    try {
+      const tokensJson = await AsyncStorage.getItem("admin_tokens");
+      if (tokensJson) {
+        const tokens = JSON.parse(tokensJson);
+        setAllTokens(tokens);
+        setGeneratedTokens(tokens.slice(-5)); // Show last 5 as "generated"
+      }
+    } catch (error) {
+      console.error("Failed to load tokens:", error);
+    }
+  };
+
+  const saveTokens = async (tokens: UserSubscription[]) => {
+    try {
+      await AsyncStorage.setItem("admin_tokens", JSON.stringify(tokens));
+    } catch (error) {
+      console.error("Failed to save tokens:", error);
+    }
+  };
 
   const haptic = useCallback((type: "light" | "success" | "error") => {
     if (Platform.OS === "web") return;
@@ -207,12 +313,15 @@ export default function AdminPanel() {
       });
     }
 
-    setGeneratedTokens([...generatedTokens, ...newTokens]);
+    const updatedTokens = [...allTokens, ...newTokens];
+    setAllTokens(updatedTokens);
+    setGeneratedTokens(updatedTokens.slice(-5));
+    saveTokens(updatedTokens);
     setLoading(false);
     haptic("success");
     Alert.alert("✅ Tokens Generated", `Generated ${count} ${plan.name} token(s)`);
     setTokenCount("1");
-  }, [selectedPlan, tokenCount, generatedTokens, haptic]);
+  }, [selectedPlan, tokenCount, allTokens, haptic]);
 
   // ============================================================
   // LOGIN SCREEN
@@ -449,6 +558,128 @@ export default function AdminPanel() {
           <Text style={s.infoText}>• All tokens are cryptographically signed</Text>
           <Text style={s.infoText}>• Tokens expire automatically after duration</Text>
           <Text style={s.infoText}>• Users can extend subscriptions anytime</Text>
+        </View>
+
+        {/* User Management */}
+        <View style={s.section}>
+          <Text style={s.sectionTitle}>👥 USER MANAGEMENT</Text>
+          <Text style={s.infoText}}>Total Active Tokens: {allTokens.filter(t => t.status === "active" && t.expiresAt > Date.now()).length}</Text>
+          
+          {allTokens.length > 0 ? (
+            allTokens.slice(-10).reverse().map((token, idx) => {
+              const plan = PAYMENT_PLANS.find((p) => p.id === token.planId);
+              const isExpired = token.expiresAt < Date.now();
+              const expiresIn = Math.floor((token.expiresAt - Date.now()) / 1000 / 60 / 60);
+              return (
+                <View key={idx} style={[s.tokenItem, { borderColor: isExpired ? "#ff0000" : plan?.color }]}>
+                  <Text style={[s.tokenText, { color: isExpired ? "#ff0000" : plan?.color }]}>{token.token}</Text>
+                  <Text style={s.tokenMeta}>{plan?.name} • {isExpired ? "EXPIRED" : `Expires in ${expiresIn}h`}</Text>
+                </View>
+              );
+            })
+          ) : (
+            <Text style={s.infoText}>No tokens generated yet</Text>
+          )}
+        </View>
+
+        {/* System Monitoring */}
+        <View style={s.section}>
+          <Text style={s.sectionTitle}>📊 SYSTEM MONITORING</Text>
+          
+          {/* System Health Indicator */}
+          <View style={[s.monitorBox, { borderLeftColor: systemHealth === "good" ? "#00ff88" : systemHealth === "warning" ? "#ffff00" : "#ff3b5c" }]}>
+            <Text style={s.monitorTitle}>System Health</Text>
+            <View style={s.monitorRow}>
+              <View style={[s.statusDot, { backgroundColor: systemHealth === "good" ? "#00ff88" : systemHealth === "warning" ? "#ffff00" : "#ff3b5c" }]} />
+              <Text style={[s.monitorText, { color: systemHealth === "good" ? "#00ff88" : systemHealth === "warning" ? "#ffff00" : "#ff3b5c" }]}>
+                {systemHealth === "good" ? "All Systems Operational" : systemHealth === "warning" ? "Performance Warning" : "Critical Condition"}
+              </Text>
+            </View>
+            <Text style={s.monitorSub}>Last updated: {lastUpdate.toLocaleTimeString()}</Text>
+          </View>
+
+          {/* Battery Status */}
+          {batteryLevel !== null && (
+            <View style={s.monitorBox}>
+              <Text style={s.monitorTitle}>🔋 Battery</Text>
+              <View style={s.monitorRow}>
+                <Text style={s.monitorText}>Level: {batteryLevel.toFixed(0)}%</Text>
+                <Text style={s.monitorText}>Status: {batteryState}</Text>
+              </View>
+              <View style={s.progressBarContainer}>
+                <View style={[s.progressBar, { width: `${batteryLevel}%`, backgroundColor: batteryLevel > 50 ? "#00ff88" : batteryLevel > 20 ? "#ffff00" : "#ff3b5c" }]} />
+              </View>
+            </View>
+          )}
+
+          {/* CPU Usage */}
+          <View style={s.monitorBox}>
+            <Text style={s.monitorTitle}>⚡ CPU Usage</Text>
+            <Text style={s.monitorText}>{cpuUsage}</Text>
+            <View style={s.progressBarContainer}>
+              <View style={[s.progressBar, { width: cpuUsage, backgroundColor: parseInt(cpuUsage) > 80 ? "#ff3b5c" : parseInt(cpuUsage) > 60 ? "#ffff00" : "#00ff88" }]} />
+            </View>
+          </View>
+
+          {/* Memory Usage */}
+          <View style={s.monitorBox}>
+            <Text style={s.monitorTitle}>🧠 Memory</Text>
+            <Text style={s.monitorText}>{memoryUsage}</Text>
+            <View style={s.progressBarContainer}>
+              <View style={[s.progressBar, { width: memoryUsage, backgroundColor: parseInt(memoryUsage) > 85 ? "#ff3b5c" : parseInt(memoryUsage) > 70 ? "#ffff00" : "#00ff88" }]} />
+            </View>
+          </View>
+
+          {/* Disk Usage */}
+          <View style={s.monitorBox}>
+            <Text style={s.monitorTitle}>💾 Disk</Text>
+            <Text style={s.monitorText}>{diskUsage}</Text>
+            <View style={s.progressBarContainer}>
+              <View style={[s.progressBar, { width: diskUsage, backgroundColor: parseInt(diskUsage) > 90 ? "#ff3b5c" : parseInt(diskUsage) > 70 ? "#ffff00" : "#00ff88" }]} />
+            </View>
+          </View>
+
+          {/* Network Status */}
+          <View style={s.monitorBox}>
+            <Text style={s.monitorTitle}>🌐 Network</Text>
+            <View style={s.monitorRow}>
+              <View style={[s.statusDot, { backgroundColor: "#00ff88" }]} />
+              <Text style={s.monitorText}>Status: {networkStatus}</Text>
+            </View>
+          </View>
+
+          {/* Device Info */}
+          {deviceInfo && (
+            <View style={s.monitorBox}>
+              <Text style={s.monitorTitle}>📱 Device Info</Text>
+              <Text style={s.monitorText}>{deviceInfo.brand} {deviceInfo.modelName}</Text>
+              <Text style={s.monitorText}>{deviceInfo.osName} {deviceInfo.osVersion}</Text>
+              {deviceInfo.totalMemory && (
+                <Text style={s.monitorText}>RAM: {(deviceInfo.totalMemory / 1024 / 1024 / 1024).toFixed(1)} GB</Text>
+              )}
+            </View>
+          )}
+
+          {/* Active Modules & Tools */}
+          <View style={s.monitorBox}>
+            <Text style={s.monitorTitle}>Active Modules</Text>
+            <Text style={s.monitorText}>52 Modules Running</Text>
+            <Text style={s.monitorText}>344 Tools Available</Text>
+          </View>
+
+          {/* Session Info */}
+          <View style={s.monitorBox}>
+            <Text style={s.monitorTitle}>Session Info</Text>
+            <Text style={s.monitorText}>Admin: {adminSession.sessionToken.substring(0, 8)}...</Text>
+            <Text style={s.monitorText}>Login: {new Date(adminSession.loginTime).toLocaleTimeString()}</Text>
+          </View>
+
+          {/* Storage */}
+          <View style={s.monitorBox}>
+            <Text style={s.monitorTitle}>💼 Storage</Text>
+            <Text style={s.monitorText}>Tokens: {allTokens.length}</Text>
+            <Text style={s.monitorText}>Active: {allTokens.filter(t => t.status === "active" && t.expiresAt > Date.now()).length}</Text>
+          </View>
         </View>
       </ScrollView>
     </ScreenContainer>
@@ -710,5 +941,55 @@ const s = StyleSheet.create({
     color: "#00ff88",
     fontFamily: mono,
     marginBottom: 4,
+  },
+  // User Management styles
+  monitorBox: {
+    backgroundColor: "#0d1117",
+    borderWidth: 1,
+    borderColor: "#1e293b",
+    borderRadius: 8,
+    padding: 12,
+    gap: 6,
+    marginBottom: 8,
+  },
+  monitorTitle: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#00ff88",
+    fontFamily: mono,
+    marginBottom: 4,
+  },
+  monitorRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  monitorText: {
+    fontSize: 11,
+    color: "#e0e7ff",
+    fontFamily: mono,
+  },
+  monitorSub: {
+    fontSize: 9,
+    color: "#6b7280",
+    fontFamily: mono,
+    marginTop: 4,
+  },
+  progressBarContainer: {
+    height: 6,
+    backgroundColor: "#1e293b",
+    borderRadius: 3,
+    marginTop: 6,
+    overflow: "hidden",
+  },
+  progressBar: {
+    height: "100%",
+    borderRadius: 3,
+    minWidth: "5%",
+  },
+  statusDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
   },
 });

@@ -18,19 +18,34 @@ export const chatRouter = router({
     .input(z.any())
     .mutation(async ({ input }) => {
       try {
-        // Parse input flexibly
+        // Parse input flexibly - handle multiple formats
         let messages: any[] = [];
         let agentRole: string | undefined;
         let model: string | undefined;
+        let sessionId: string | undefined;
 
-        if (input && typeof input === "object") {
-          if (Array.isArray(input.messages)) {
-            messages = input.messages;
-          } else if (Array.isArray(input)) {
-            messages = input;
+        // Handle different input formats
+        let parsedInput = input;
+        
+        // If input is wrapped in { json: {...} } (from client fetch)
+        if (input && input.json && typeof input.json === "object") {
+          parsedInput = input.json;
+        }
+        
+        // Now parse the actual content
+        if (parsedInput) {
+          if (Array.isArray(parsedInput.messages)) {
+            messages = parsedInput.messages;
+          } else if (Array.isArray(parsedInput)) {
+            messages = parsedInput;
+          } else if (parsedInput.message) {
+            // Single message format
+            messages = [{ role: "user", content: parsedInput.message }];
           }
-          agentRole = input.agentRole;
-          model = input.model;
+          
+          agentRole = parsedInput.agentRole;
+          model = parsedInput.model;
+          sessionId = parsedInput.sessionId;
         }
 
         // Validate messages
@@ -67,14 +82,22 @@ export const chatRouter = router({
           model,
         });
         console.log(`[Chat] LLM response received from model: ${response.model}`);
-
+        
         const content = response.choices?.[0]?.message?.content || "[ERROR] No response from Quantum Intelligence Ultra";
-
+        
+        // Return in tRPC format that the client expects
         return {
-          success: true,
-          message: content,
-          model: response.model,
-          timestamp: new Date().toISOString(),
+          result: {
+            data: {
+              json: {
+                reply: content,
+                message: content,
+                success: true,
+                model: response.model,
+                timestamp: new Date().toISOString(),
+              }
+            }
+          }
         };
       } catch (error: any) {
         console.error("[Chat] Error:", error.message);
