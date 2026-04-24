@@ -1,2 +1,0 @@
-include hacxgpt/providers.json
-recursive-include hacxgpt/prompts *.md
