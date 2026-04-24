@@ -1,0 +1,5 @@
+http://api.github.com
+http://blog.github.com
+http://www.github.com
+http://shop.github.com
+http://admin.github.com

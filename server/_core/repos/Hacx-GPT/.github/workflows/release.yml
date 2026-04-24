@@ -1,0 +1,41 @@
+name: Auto Release
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'version.json'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: github.repository == 'HacxGPT-Official/HacxGPT-CLI'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Get version info
+        id: version
+        run: |
+          VERSION=$(jq -r '.version' version.json | sed 's/^v//')
+          NOTES=$(jq -r '.release_notes' version.json)
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+          echo "notes=$NOTES" >> $GITHUB_OUTPUT
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: HacxGPT ${{ steps.version.outputs.tag }}
+          body: |
+            ### Release Notes
+            ${{ steps.version.outputs.notes }}
+            
+            ---
+            *Automated release triggered by version.json update.*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
