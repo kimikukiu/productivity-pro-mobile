@@ -1,7 +1,8 @@
 import {
   ScrollView, Text, View, TextInput, Pressable, ActivityIndicator,
-  StyleSheet, Platform, Alert,
+  StyleSheet, Platform, Alert, Animated,
 } from "react-native";
+import TerminalPopup from "@/components/terminal-popup";
 import { ScreenContainer } from "@/components/screen-container";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { getApiBaseUrl } from "@/constants/oauth";
@@ -78,6 +79,10 @@ export default function ChatScreen() {
   // const [showTools, setShowTools] = useState(false); // Unused for now
   const [activeTools, setActiveTools] = useState<Set<string>>(new Set(["cloud"]));
   const scrollRef = useRef<ScrollView>(null);
+  const [showTerminal, setShowTerminal] = useState(false);
+  const [terminalLogs, setTerminalLogs] = useState<string[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const terminalAnim = useRef(new Animated.Value(0)).current;
 
   const haptic = useCallback((type: "light" | "medium" | "success" | "error") => {
     if (Platform.OS === "web") return;
@@ -86,6 +91,17 @@ export default function ChatScreen() {
     else if (type === "medium") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     else Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }, []);
+
+  const toggleTerminal = useCallback(() => {
+    haptic("light");
+    const toValue = showTerminal ? 0 : 1;
+    Animated.timing(terminalAnim, {
+      toValue,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+    setShowTerminal(!showTerminal);
+  }, [showTerminal, terminalAnim, haptic]);
 
   const sendMessage = useCallback(async () => {
     if (!input.trim() || loading) return;
@@ -103,6 +119,10 @@ export default function ChatScreen() {
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
+    setIsProcessing(true);
+    
+    // Add terminal log
+    setTerminalLogs((prev) => [...prev, `[${new Date().toLocaleTimeString()}] Sending message with ${activeRole || 'default'} agent...`]);
 
     try {
       const apiMessages = messages
@@ -130,6 +150,8 @@ export default function ChatScreen() {
       const rd = data?.result?.data?.json || data?.result?.data || data?.result || data;
       const aiContent = rd?.message || rd?.content || "[ERROR] No response";
 
+      setTerminalLogs((prev) => [...prev, `[${new Date().toLocaleTimeString()}] Response received (${aiContent.length} chars)`]);
+
       haptic("success");
       setMessages((prev) => [
         ...prev,
@@ -144,6 +166,7 @@ export default function ChatScreen() {
       ]);
     } catch (error: any) {
       haptic("error");
+      setTerminalLogs((prev) => [...prev, `[${new Date().toLocaleTimeString()}] ERROR: ${error?.message || "Connection failed"}`]);
       setMessages((prev) => [
         ...prev,
         {
@@ -156,6 +179,8 @@ export default function ChatScreen() {
       ]);
     } finally {
       setLoading(false);
+      setIsProcessing(false);
+      setTerminalLogs((prev) => [...prev, `[${new Date().toLocaleTimeString()}] Processing complete`]);
     }
   }, [input, loading, activeRole, activeModel, messages, haptic]);
 
@@ -220,6 +245,12 @@ export default function ChatScreen() {
             style={({ pressed }) => [s.headerBtn, { borderColor: "#ffff00" }, pressed && { opacity: 0.6 }]}
           >
             <Text style={[s.headerBtnText, { color: "#ffff00" }]}>ZIP</Text>
+          </Pressable>
+          <Pressable
+            onPress={toggleTerminal}
+            style={({ pressed }) => [s.headerBtn, { borderColor: showTerminal ? "#00ff88" : "#334155" }, pressed && { opacity: 0.6 }]}
+          >
+            <Text style={[s.headerBtnText, { color: showTerminal ? "#00ff88" : "#6b7280" }]}>TERM</Text>
           </Pressable>
         </View>
 
@@ -435,6 +466,14 @@ export default function ChatScreen() {
           </Text>
         </View>
       </View>
+
+      {/* Terminal Popup */}
+      <TerminalPopup
+        visible={showTerminal}
+        onClose={toggleTerminal}
+        logs={terminalLogs}
+        isProcessing={isProcessing}
+      />
     </ScreenContainer>
   );
 }

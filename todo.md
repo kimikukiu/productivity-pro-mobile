@@ -217,7 +217,7 @@
 - [x] Telegram bot tools: configurable token/ID from panel (DONE in code)
 - [x] LockBit: configurable wallet/contact, fake tracking, multi-IP/UA/proxy (DONE - Ransomware Framework module)
 - [x] Build Admin login (password: #AllOfThem-3301) - DONE in Phase 20
-- [ ] Terminal popup in chat (Manus-style): small, closeable with X, shows live actions - PENDING
+- [x] Terminal popup in chat (Manus-style): small, closeable with X, shows live actions - DONE in code
 - [x] Update WHOAMISEC GPT with watchdog capabilities and all new tools (DONE in code)
 
 ## Phase 19: 70+ Free API Services + Jailbreak Integration (MOSTLY DONE)
@@ -231,7 +231,7 @@
 - [x] Add Deploy tools: Next.js, Astro, Angular, Flutter, Nuxt, SvelteKit, Vue, React (DONE in code)
 - [ ] Integrate AI Liberator jailbreak prompt into GPT system - PENDING
 - [x] Build admin login (password: #AllOfThem-3301) - DONE in Phase 20
-- [ ] Terminal popup in chat (Manus-style, closeable with X) - PENDING
+- [x] Terminal popup in chat (Manus-style, closeable with X) - DONE in code
 - [x] Watchdog system: monitor all modules/tools, auto-repair, alerting - DONE in code
 - [x] Update dashboard with correct total counts - DONE
 
@@ -330,5 +330,4 @@
    - Deploy to GitHub (kimikukiu)
    - Deploy to Vercel
    - Generate APK for mobile
-   - Terminal popup in chat (Manus-style) - ALL PHASES
-4. **Cross-phase**: Terminal popup in chat (mentioned in Phases 18, 19, 20)
+4. **Completed in this session**: Terminal popup in chat (Manus-style) - DONE
