@@ -24,6 +24,8 @@
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "server/_core/repos/full-whm-exp/manus-core/agent-loop",
+    "server/_core/repos/whm-un1c/manus-core/agent-loop"
   ]
 }
