@@ -1,7 +1,7 @@
 /**
  * Real Training Data Loader
  * Loads actual repository content and generates dynamic system prompt for GPT
- * Processes 27 repositories with dynamic file counts from training_database.json
+ * Processes 41 repositories (27 original + 14 new) with dynamic file counts from training_database.json
  */
 
 import * as fs from "fs";
