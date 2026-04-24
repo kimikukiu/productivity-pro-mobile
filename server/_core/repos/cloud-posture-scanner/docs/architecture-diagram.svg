@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" width="960" height="620" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#060a10"/>
+      <stop offset="100%" style="stop-color:#0d1a2e"/>
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0085ff"/>
+      <stop offset="100%" style="stop-color:#00d4ff"/>
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00b85a"/>
+      <stop offset="100%" style="stop-color:#00e87a"/>
+    </linearGradient>
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b00"/>
+      <stop offset="100%" style="stop-color:#ffaa00"/>
+    </linearGradient>
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7b2fff"/>
+      <stop offset="100%" style="stop-color:#b06fff"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#00d4ff" opacity="0.8"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#00e87a" opacity="0.8"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="620" fill="url(#bgGrad)" rx="16"/>
+
+  <!-- Grid lines -->
+  <g opacity="0.04" stroke="#00d4ff" stroke-width="1">
+    <line x1="0" y1="80" x2="960" y2="80"/>
+    <line x1="0" y1="160" x2="960" y2="160"/>
+    <line x1="0" y1="240" x2="960" y2="240"/>
+    <line x1="0" y1="320" x2="960" y2="320"/>
+    <line x1="0" y1="400" x2="960" y2="400"/>
+    <line x1="0" y1="480" x2="960" y2="480"/>
+    <line x1="0" y1="560" x2="960" y2="560"/>
+    <line x1="80" y1="0" x2="80" y2="620"/>
+    <line x1="160" y1="0" x2="160" y2="620"/>
+    <line x1="240" y1="0" x2="240" y2="620"/>
+    <line x1="320" y1="0" x2="320" y2="620"/>
+    <line x1="400" y1="0" x2="400" y2="620"/>
+    <line x1="480" y1="0" x2="480" y2="620"/>
+    <line x1="560" y1="0" x2="560" y2="620"/>
+    <line x1="640" y1="0" x2="640" y2="620"/>
+    <line x1="720" y1="0" x2="720" y2="620"/>
+    <line x1="800" y1="0" x2="800" y2="620"/>
+    <line x1="880" y1="0" x2="880" y2="620"/>
+  </g>
+
+  <!-- Title -->
+  <text x="480" y="36" text-anchor="middle" fill="#00d4ff" font-size="20" font-weight="700" letter-spacing="3" filter="url(#glow)">CLOUD POSTURE SCANNER</text>
+  <text x="480" y="55" text-anchor="middle" fill="#4a7499" font-size="11" letter-spacing="2">AWS SERVERLESS ARCHITECTURE · FREE TIER</text>
+
+  <!-- === CLIENT === -->
+  <g filter="url(#shadow)">
+    <rect x="380" y="75" width="200" height="64" rx="10" fill="#0d1a2e" stroke="#00d4ff" stroke-width="1.5" stroke-opacity="0.6"/>
+  </g>
+  <text x="418" y="99" fill="#00d4ff" font-size="20">🖥️</text>
+  <text x="450" y="99" fill="#cde4ff" font-size="13" font-weight="600">CLIENT</text>
+  <text x="480" y="118" text-anchor="middle" fill="#4a7499" font-size="10">Browser Dashboard / Postman</text>
+  <text x="480" y="131" text-anchor="middle" fill="#4a7499" font-size="10">S3 Static Website</text>
+
+  <!-- Arrow: Client → API Gateway -->
+  <line x1="480" y1="139" x2="480" y2="172" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" opacity="0.7"/>
+  <text x="490" y="158" fill="#4a7499" font-size="9">HTTPS</text>
+
+  <!-- === API GATEWAY === -->
+  <g filter="url(#shadow)">
+    <rect x="270" y="175" width="420" height="60" rx="10" fill="#0a1428" stroke="url(#blueGrad)" stroke-width="2"/>
+  </g>
+  <text x="316" y="200" fill="#00d4ff" font-size="16">⚡</text>
+  <text x="336" y="200" fill="#cde4ff" font-size="13" font-weight="700">AWS API GATEWAY</text>
+  <text x="310" y="220" fill="#4a7499" font-size="9.5">GET /instances</text>
+  <text x="408" y="220" fill="#4a7499" font-size="9.5">GET /buckets</text>
+  <text x="498" y="220" fill="#4a7499" font-size="9.5">GET /cis-results</text>
+  <text x="598" y="220" fill="#4a7499" font-size="9.5">POST /scan</text>
+
+  <!-- 4 arrows from API GW to Lambdas -->
+  <line x1="335" y1="235" x2="200" y2="298" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" opacity="0.6"/>
+  <line x1="430" y1="235" x2="393" y2="298" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" opacity="0.6"/>
+  <line x1="530" y1="235" x2="567" y2="298" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" opacity="0.6"/>
+  <line x1="625" y1="235" x2="760" y2="298" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" opacity="0.6"/>
+
+  <!-- === LAMBDA FUNCTIONS ROW === -->
+
+  <!-- Lambda 1: discover_ec2 -->
+  <g filter="url(#shadow)">
+    <rect x="100" y="300" width="195" height="75" rx="10" fill="#0a1428" stroke="#ffaa00" stroke-width="1.5" stroke-opacity="0.7"/>
+  </g>
+  <text x="118" y="322" fill="#ffcc00" font-size="14">λ</text>
+  <text x="136" y="322" fill="#cde4ff" font-size="11" font-weight="600">discover_ec2_lambda</text>
+  <text x="198" y="341" text-anchor="middle" fill="#4a7499" font-size="9">Python 3.12 · 10s timeout</text>
+  <text x="198" y="356" text-anchor="middle" fill="#4a7499" font-size="9">boto3 → ec2.describe_instances</text>
+  <text x="198" y="368" text-anchor="middle" fill="#00e87a" font-size="9">✓ Least privilege IAM</text>
+
+  <!-- Lambda 2: discover_s3 -->
+  <g filter="url(#shadow)">
+    <rect x="310" y="300" width="185" height="75" rx="10" fill="#0a1428" stroke="#ffaa00" stroke-width="1.5" stroke-opacity="0.7"/>
+  </g>
+  <text x="328" y="322" fill="#ffcc00" font-size="14">λ</text>
+  <text x="346" y="322" fill="#cde4ff" font-size="11" font-weight="600">discover_s3_lambda</text>
+  <text x="403" y="341" text-anchor="middle" fill="#4a7499" font-size="9">Python 3.12 · 15s timeout</text>
+  <text x="403" y="356" text-anchor="middle" fill="#4a7499" font-size="9">boto3 → s3.list_buckets</text>
+  <text x="403" y="368" text-anchor="middle" fill="#00e87a" font-size="9">✓ Least privilege IAM</text>
+
+  <!-- Lambda 3: get_results -->
+  <g filter="url(#shadow)">
+    <rect x="510" y="300" width="185" height="75" rx="10" fill="#0a1428" stroke="#ffaa00" stroke-width="1.5" stroke-opacity="0.7"/>
+  </g>
+  <text x="528" y="322" fill="#ffcc00" font-size="14">λ</text>
+  <text x="546" y="322" fill="#cde4ff" font-size="11" font-weight="600">get_results_lambda</text>
+  <text x="603" y="341" text-anchor="middle" fill="#4a7499" font-size="9">Python 3.12 · 10s timeout</text>
+  <text x="603" y="356" text-anchor="middle" fill="#4a7499" font-size="9">dynamodb.Table.scan()</text>
+  <text x="603" y="368" text-anchor="middle" fill="#00e87a" font-size="9">✓ Read-only DynamoDB</text>
+
+  <!-- Lambda 4: run_cis_checks -->
+  <g filter="url(#shadow)">
+    <rect x="710" y="300" width="180" height="75" rx="10" fill="#0a1428" stroke="#ffaa00" stroke-width="1.5" stroke-opacity="0.7"/>
+  </g>
+  <text x="728" y="322" fill="#ffcc00" font-size="14">λ</text>
+  <text x="746" y="322" fill="#cde4ff" font-size="11" font-weight="600">run_cis_checks_lambda</text>
+  <text x="800" y="341" text-anchor="middle" fill="#4a7499" font-size="9">Python 3.12 · 30s timeout</text>
+  <text x="800" y="356" text-anchor="middle" fill="#4a7499" font-size="9">EC2+S3+IAM+CloudTrail APIs</text>
+  <text x="800" y="368" text-anchor="middle" fill="#00e87a" font-size="9">✓ Writes scan_results table</text>
+
+  <!-- === AWS APIs Row === -->
+  <!-- Arrows: Lambda 1 → EC2 API -->
+  <line x1="198" y1="375" x2="155" y2="430" stroke="#00e87a" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGreen)" opacity="0.6"/>
+  <!-- Arrow: Lambda 2 → S3 API -->
+  <line x1="403" y1="375" x2="390" y2="430" stroke="#00e87a" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGreen)" opacity="0.6"/>
+  <!-- Arrow: Lambda 4 → multiple APIs -->
+  <line x1="800" y1="375" x2="650" y2="430" stroke="#00e87a" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGreen)" opacity="0.6"/>
+  <line x1="800" y1="375" x2="800" y2="430" stroke="#00e87a" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrowGreen)" opacity="0.6"/>
+
+  <!-- EC2 API Box -->
+  <g filter="url(#shadow)">
+    <rect x="70" y="432" width="145" height="50" rx="8" fill="#0d1a2e" stroke="#ff9900" stroke-width="1.2" stroke-opacity="0.8"/>
+  </g>
+  <text x="142" y="454" text-anchor="middle" fill="#ff9900" font-size="11" font-weight="600">EC2 API</text>
+  <text x="142" y="470" text-anchor="middle" fill="#4a7499" font-size="8.5">DescribeInstances</text>
+  <text x="142" y="481" text-anchor="middle" fill="#4a7499" font-size="8.5">DescribeSecurityGroups</text>
+
+  <!-- S3 API Box -->
+  <g filter="url(#shadow)">
+    <rect x="330" y="432" width="145" height="50" rx="8" fill="#0d1a2e" stroke="#ff9900" stroke-width="1.2" stroke-opacity="0.8"/>
+  </g>
+  <text x="402" y="454" text-anchor="middle" fill="#ff9900" font-size="11" font-weight="600">S3 API</text>
+  <text x="402" y="470" text-anchor="middle" fill="#4a7499" font-size="8.5">ListBuckets · GetBucketEncryption</text>
+  <text x="402" y="481" text-anchor="middle" fill="#4a7499" font-size="8.5">GetBucketPublicAccessBlock</text>
+
+  <!-- IAM API Box -->
+  <g filter="url(#shadow)">
+    <rect x="565" y="432" width="115" height="50" rx="8" fill="#0d1a2e" stroke="#ff9900" stroke-width="1.2" stroke-opacity="0.8"/>
+  </g>
+  <text x="622" y="454" text-anchor="middle" fill="#ff9900" font-size="11" font-weight="600">IAM API</text>
+  <text x="622" y="470" text-anchor="middle" fill="#4a7499" font-size="8.5">GetAccountSummary</text>
+  <text x="622" y="481" text-anchor="middle" fill="#4a7499" font-size="8.5">MFA root check</text>
+
+  <!-- CloudTrail API Box -->
+  <g filter="url(#shadow)">
+    <rect x="710" y="432" width="130" height="50" rx="8" fill="#0d1a2e" stroke="#ff9900" stroke-width="1.2" stroke-opacity="0.8"/>
+  </g>
+  <text x="775" y="454" text-anchor="middle" fill="#ff9900" font-size="11" font-weight="600">CloudTrail API</text>
+  <text x="775" y="470" text-anchor="middle" fill="#4a7499" font-size="8.5">DescribeTrails</text>
+  <text x="775" y="481" text-anchor="middle" fill="#4a7499" font-size="8.5">GetTrailStatus</text>
+
+  <!-- Arrows from Lambda 3 and Lambda 4 to DynamoDB -->
+  <line x1="603" y1="375" x2="603" y2="530" stroke="#b06fff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" opacity="0.6"/>
+  <line x1="800" y1="375" x2="700" y2="530" stroke="#b06fff" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)" opacity="0.6"/>
+  <!-- Arrow label -->
+  <text x="740" y="458" fill="#7b2fff" font-size="9" font-weight="600">PutItem / Scan</text>
+
+  <!-- === DYNAMODB === -->
+  <g filter="url(#shadow)">
+    <rect x="500" y="533" width="310" height="68" rx="10" fill="#0a1428" stroke="url(#purpleGrad)" stroke-width="2"/>
+  </g>
+  <text x="522" y="558" fill="#b06fff" font-size="16">🗄️</text>
+  <text x="548" y="558" fill="#cde4ff" font-size="13" font-weight="700">DynamoDB</text>
+  <text x="670" y="558" fill="#4a7499" font-size="9">On-demand · Free Tier</text>
+  <text x="655" y="574" text-anchor="middle" fill="#4a7499" font-size="9">Table: scan_results</text>
+  <text x="655" y="588" text-anchor="middle" fill="#4a7499" font-size="9">PK: resource_id  SK: timestamp</text>
+  <text x="655" y="597" text-anchor="middle" fill="#00e87a" font-size="9">check_name · status · evidence</text>
+
+  <!-- IAM Role badge -->
+  <g filter="url(#shadow)">
+    <rect x="28" y="533" width="205" height="68" rx="10" fill="#0a1428" stroke="#00e87a" stroke-width="1.5" stroke-opacity="0.6"/>
+  </g>
+  <text x="46" y="557" fill="#00e87a" font-size="13">🔑</text>
+  <text x="66" y="558" fill="#cde4ff" font-size="12" font-weight="700">IAM Execution Role</text>
+  <text x="130" y="573" text-anchor="middle" fill="#4a7499" font-size="9">CloudPostureScannerRole</text>
+  <text x="130" y="586" text-anchor="middle" fill="#4a7499" font-size="9">Least-privilege policy</text>
+  <text x="130" y="598" text-anchor="middle" fill="#00e87a" font-size="9">No hardcoded credentials</text>
+
+  <!-- Legend -->
+  <text x="30" y="186" fill="#4a7499" font-size="9" font-weight="600">LEGEND:</text>
+  <line x1="30" y1="200" x2="55" y2="200" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="60" y="203" fill="#4a7499" font-size="9">API / invocation</text>
+  <line x1="30" y1="215" x2="55" y2="215" stroke="#00e87a" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="60" y="218" fill="#4a7499" font-size="9">AWS SDK call</text>
+  <line x1="30" y1="230" x2="55" y2="230" stroke="#b06fff" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="60" y="233" fill="#4a7499" font-size="9">DynamoDB read/write</text>
+</svg>
