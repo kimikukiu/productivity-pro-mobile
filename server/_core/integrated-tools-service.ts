@@ -612,7 +612,7 @@ export const integratedToolsRouter = router({
       projectId: z.string().optional(),
       deploymentUrl: z.string().optional(),
       // KV Store fields
-      key: z.string().optional(),
+      storeKey: z.string().optional(),
       value: z.any().optional(),
       ttl: z.number().optional(),
     }))
