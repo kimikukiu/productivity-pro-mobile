@@ -7,40 +7,73 @@ describe("LLM API Key Validation", () => {
 
     expect(apiKey).toBeDefined();
     expect(provider).toBeDefined();
-    expect(["deepseek", "groq", "together", "openrouter", "ollama"]).toContain(provider);
+    expect([
+      "deepseek",
+      "groq",
+      "together",
+      "openrouter",
+      "ollama",
+      "openai",
+    ]).toContain(provider);
 
     // Test with actual API call
     if (provider === "groq" && apiKey) {
-      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://api.groq.com/openai/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "mixtral-8x7b-32768",
+            messages: [{ role: "user", content: "test" }],
+            max_tokens: 10,
+          }),
         },
-        body: JSON.stringify({
-          model: "mixtral-8x7b-32768",
-          messages: [{ role: "user", content: "test" }],
-          max_tokens: 10,
-        }),
-      });
+      );
 
       expect(response.status).not.toBe(401);
       expect(response.ok || response.status === 200).toBe(true);
     }
 
     if (provider === "deepseek" && apiKey) {
-      const response = await fetch("https://api.deepseek.com/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://api.deepseek.com/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "deepseek-chat",
+            messages: [{ role: "user", content: "test" }],
+            max_tokens: 10,
+          }),
         },
-        body: JSON.stringify({
-          model: "deepseek-chat",
-          messages: [{ role: "user", content: "test" }],
-          max_tokens: 10,
-        }),
-      });
+      );
+
+      expect(response.status).not.toBe(401);
+    }
+
+    if (provider === "openai" && apiKey) {
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: "test" }],
+            max_tokens: 10,
+          }),
+        },
+      );
 
       expect(response.status).not.toBe(401);
     }
