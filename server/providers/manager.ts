@@ -10,6 +10,7 @@ import { GroqProvider, createGroqProvider } from './groq';
 import { TogetherProvider, createTogetherProvider } from './together';
 import { HuggingFaceProvider, createHuggingFaceProvider } from './huggingface';
 import { KilocodeProvider, createKilocodeProvider } from './kilocode';
+import { OpenAIProvider } from './openai';
 
 export interface ProviderStatus {
   name: string;
@@ -83,33 +84,47 @@ export class ProviderManager {
       console.warn('[ProviderManager] GitHub Code Search not available:', error);
     }
 
-    // 3. Groq (FREE tier)
+    // 3. OpenAI GPT (Priority 3 — requires API key)
+    if (process.env.OPENAI_API_KEY) {
+      try {
+        const openaiProvider = new OpenAIProvider();
+        this.registerProvider('openai', openaiProvider, {
+          name: 'openai',
+          enabled: true,
+          priority: 3,
+        });
+      } catch (error) {
+        console.warn('[ProviderManager] OpenAI not available:', error);
+      }
+    }
+
+    // 4. Groq (FREE tier)
     if (process.env.GROQ_API_KEY) {
       const groqProvider = createGroqProvider();
       this.registerProvider('groq', groqProvider, {
         name: 'groq',
         enabled: true,
-        priority: 3,
+        priority: 4,
       });
     }
 
-    // 4. Together AI (FREE credits)
+    // 5. Together AI (FREE credits)
     if (process.env.TOGETHER_API_KEY) {
       const togetherProvider = createTogetherProvider();
       this.registerProvider('together', togetherProvider, {
         name: 'together',
         enabled: true,
-        priority: 4,
+        priority: 5,
       });
     }
 
-    // 5. HuggingFace (FREE 10k/month)
+    // 6. HuggingFace (FREE 10k/month)
     if (process.env.HF_API_TOKEN || process.env.HUGGINGFACE_API_KEY) {
       const hfProvider = createHuggingFaceProvider();
       this.registerProvider('huggingface', hfProvider, {
         name: 'huggingface',
         enabled: true,
-        priority: 5,
+        priority: 6,
       });
     }
   }
