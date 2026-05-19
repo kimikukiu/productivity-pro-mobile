@@ -20,7 +20,7 @@ export default function Tool247Screen() {
     try {
       setOutput(`[Tool-247] Executed: ${input}`);
     } catch (error) {
-      Alert.alert("Error", String(error));
+      Alert.alert("Error", error.message);
     } finally {
       setIsLoading(false);
     }
