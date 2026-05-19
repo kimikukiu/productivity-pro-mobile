@@ -19,7 +19,12 @@ export type FileContent = {
   type: "file_url";
   file_url: {
     url: string;
-    mime_type?: "audio/mpeg" | "audio/wav" | "application/pdf" | "audio/mp4" | "video/mp4";
+    mime_type?:
+      | "audio/mpeg"
+      | "audio/wav"
+      | "application/pdf"
+      | "audio/mp4"
+      | "video/mp4";
   };
 };
 
@@ -50,7 +55,10 @@ export type ToolChoiceExplicit = {
   };
 };
 
-export type ToolChoice = ToolChoicePrimitive | ToolChoiceByName | ToolChoiceExplicit;
+export type ToolChoice =
+  | ToolChoicePrimitive
+  | ToolChoiceByName
+  | ToolChoiceExplicit;
 
 export type InvokeParams = {
   messages: Message[];
@@ -109,10 +117,13 @@ export type ResponseFormat =
   | { type: "json_object" }
   | { type: "json_schema"; json_schema: JsonSchema };
 
-const ensureArray = (value: MessageContent | MessageContent[]): MessageContent[] =>
-  Array.isArray(value) ? value : [value];
+const ensureArray = (
+  value: MessageContent | MessageContent[],
+): MessageContent[] => (Array.isArray(value) ? value : [value]);
 
-const normalizeContentPart = (part: MessageContent): TextContent | ImageContent | FileContent => {
+const normalizeContentPart = (
+  part: MessageContent,
+): TextContent | ImageContent | FileContent => {
   if (typeof part === "string") {
     return { type: "text", text: part };
   }
@@ -168,6 +179,11 @@ const normalizeMessage = (message: Message) => {
 // ============================================================
 // MODEL ROUTING & FALLBACK CHAIN - REAL WORKING MODELS ONLY
 // ============================================================
+// Priority 1: Ollama Local
+// Priority 2: DeepSeek Free API
+// Priority 3: OpenAI GPT
+// Priority 4: Groq Free API
+// Priority 5: Together AI Free
 
 interface ModelConfig {
   id: string;
@@ -206,7 +222,21 @@ const getModelConfigs = (): ModelConfig[] => {
     priority: 2,
   });
 
-  // Priority 3: Groq Free API (Real working endpoint)
+  // Priority 3: OpenAI GPT
+  if (process.env.OPENAI_API_KEY) {
+    configs.push({
+      id: "openai-gpt",
+      name: "OpenAI GPT",
+      apiUrl: "https://api.openai.com/v1/chat/completions",
+      apiKey: process.env.OPENAI_API_KEY,
+      modelName: "gpt-4o",
+      maxTokens: 16384,
+      timeout: 60000,
+      priority: 3,
+    });
+  }
+
+  // Priority 4: Groq Free API (Real working endpoint)
   if (process.env.GROQ_API_KEY) {
     configs.push({
       id: "groq-free",
@@ -216,11 +246,11 @@ const getModelConfigs = (): ModelConfig[] => {
       modelName: "mixtral-8x7b-32768",
       maxTokens: 32768,
       timeout: 45000,
-      priority: 3,
+      priority: 4,
     });
   }
 
-  // Priority 4: Together AI Free (Real endpoint)
+  // Priority 5: Together AI Free (Real endpoint)
   if (process.env.TOGETHER_API_KEY) {
     configs.push({
       id: "together-ai",
@@ -230,7 +260,7 @@ const getModelConfigs = (): ModelConfig[] => {
       modelName: "meta-llama/Llama-2-70b-chat-hf",
       maxTokens: 4096,
       timeout: 45000,
-      priority: 4,
+      priority: 5,
     });
   }
 
