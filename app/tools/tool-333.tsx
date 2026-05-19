@@ -20,7 +20,7 @@ export default function Tool333Screen() {
     try {
       setOutput(`[Tool-333] Executed: ${input}`);
     } catch (error) {
-      Alert.alert("Error", String(error));
+      Alert.alert("Error", error.message);
     } finally {
       setIsLoading(false);
     }

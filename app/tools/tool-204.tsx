@@ -20,7 +20,7 @@ export default function Tool204Screen() {
     try {
       setOutput(`[Tool-204] Executed: ${input}`);
     } catch (error) {
-      Alert.alert("Error", String(error));
+      Alert.alert("Error", error.message);
     } finally {
       setIsLoading(false);
     }

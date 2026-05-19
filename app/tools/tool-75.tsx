@@ -20,7 +20,7 @@ export default function Tool75Screen() {
     try {
       setOutput(`[Tool-75] Executed: ${input}`);
     } catch (error) {
-      Alert.alert("Error", String(error));
+      Alert.alert("Error", error.message);
     } finally {
       setIsLoading(false);
     }
