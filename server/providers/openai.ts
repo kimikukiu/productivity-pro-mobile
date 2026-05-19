@@ -4,40 +4,34 @@
  * Models: gpt-4o, gpt-4o-mini, gpt-4-turbo, o1-preview, o1-mini
  */
 
-import { BaseProvider, LLMRequest, LLMResponse } from './base-provider';
+import { BaseProvider, LLMRequest, LLMResponse } from "./base-provider";
 
 export class OpenAIProvider extends BaseProvider {
-  name = 'openai';
-  displayName = 'OpenAI GPT / 4GzRDTjXR5p7kEuM';
-  models = [
-    'gpt-4o',
-    'gpt-4o-mini',
-    'gpt-4-turbo',
-    'o1-preview',
-    'o1-mini',
-  ];
+  name = "openai";
+  displayName = "OpenAI GPT / 4GzRDTjXR5p7kEuM";
+  models = ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "o1-preview", "o1-mini"];
 
   private apiKey: string;
-  private baseUrl = 'https://api.openai.com/v1/chat/completions';
+  private baseUrl = "https://api.openai.com/v1/chat/completions";
 
   constructor(apiKey?: string) {
     super();
-    this.apiKey = apiKey || process.env.OPENAI_API_KEY || '';
+    this.apiKey = apiKey || process.env.OPENAI_API_KEY || "";
     if (!this.apiKey) {
-      console.warn('[OpenAI] No API key provided. Set OPENAI_API_KEY env var.');
+      console.warn("[OpenAI] No API key provided. Set OPENAI_API_KEY env var.");
     }
   }
 
   async chat(request: LLMRequest): Promise<LLMResponse> {
     try {
       const response = await fetch(this.baseUrl, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.apiKey}`,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: request.model || 'gpt-4o',
+          model: request.model || "gpt-4o",
           messages: request.messages,
           temperature: request.temperature || 0.7,
           max_tokens: request.maxTokens || 16384,
@@ -53,17 +47,17 @@ export class OpenAIProvider extends BaseProvider {
       const data = await response.json();
 
       return {
-        text: data.choices?.[0]?.message?.content || '',
+        text: data.choices?.[0]?.message?.content || "",
         usage: {
           promptTokens: data.usage?.prompt_tokens || 0,
           completionTokens: data.usage?.completion_tokens || 0,
           totalTokens: data.usage?.total_tokens || 0,
         },
-        model: request.model || 'gpt-4o',
+        model: request.model || "gpt-4o",
         provider: this.name,
       };
     } catch (error) {
-      console.error('[OpenAI] Error:', error);
+      console.error("[OpenAI] Error:", error);
       throw error;
     }
   }
