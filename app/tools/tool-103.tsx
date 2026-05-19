@@ -20,7 +20,7 @@ export default function Tool103Screen() {
     try {
       setOutput(`[Tool-103] Executed: ${input}`);
     } catch (error) {
-      Alert.alert("Error", String(error));
+      Alert.alert("Error", error.message);
     } finally {
       setIsLoading(false);
     }

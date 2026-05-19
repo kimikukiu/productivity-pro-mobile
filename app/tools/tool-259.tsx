@@ -20,7 +20,7 @@ export default function Tool259Screen() {
     try {
       setOutput(`[Tool-259] Executed: ${input}`);
     } catch (error) {
-      Alert.alert("Error", String(error));
+      Alert.alert("Error", error.message);
     } finally {
       setIsLoading(false);
     }

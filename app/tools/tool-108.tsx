@@ -20,7 +20,7 @@ export default function Tool108Screen() {
     try {
       setOutput(`[Tool-108] Executed: ${input}`);
     } catch (error) {
-      Alert.alert("Error", String(error));
+      Alert.alert("Error", error.message);
     } finally {
       setIsLoading(false);
     }
